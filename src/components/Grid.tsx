@@ -3,7 +3,7 @@ import { Circle, Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
 
 interface Props {
-  onCellSelected: (cellId: string) => void;
+  onCellSelected: (cellId?: string) => void;
   cells: Cell[];
   width: number;
   height: number;
@@ -17,7 +17,16 @@ function Grid({ onCellSelected, cells, width, height }: Props): JSX.Element {
   }
 
   return (
-    <Stage width={width} height={height}>
+    <Stage
+      width={width}
+      height={height}
+      id='background'
+      onClick={({ target }) => {
+        if (target.id() === 'background') {
+          onCellSelected(undefined);
+        }
+      }}
+    >
       <Layer>
         {cells.map((cell) => {
           const cellSize = 100;

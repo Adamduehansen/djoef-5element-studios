@@ -41,8 +41,8 @@ function updateGridPosition({
   centerX,
   centerY,
 }: GenerateGridOptions) {
+  const cellSize = 100;
   return function (current: Cell[]) {
-    const cellSize = 100;
     return Array.from({ length: rows })
       .map((_, rowIndex) => {
         const y = centerY - (cellSize / 2) * rows + cellSize * rowIndex;
@@ -65,7 +65,6 @@ function updateGridPosition({
 
 function Editor(): JSX.Element {
   const gridContainerRef = useRef<HTMLDivElement>(null);
-
   const [cells, setCells] = useState<Cell[]>([]);
 
   useEffect(() => {
@@ -99,25 +98,36 @@ function Editor(): JSX.Element {
     );
   }
 
-  function setSelectedCell(cellId: string): void {
-    const selectedCell = cells.find((cell) => cell.id === cellId)!;
-    selectedCell.selected = !selectedCell.selected;
-    const otherCells = cells.filter((cell) => cell.id !== selectedCell.id);
-    const updatedCellList = [
-      ...otherCells.map((cell) => {
-        return {
-          ...cell,
-          selected: false,
-        };
-      }),
-      // The selected cell is placed last to make sure that it is rendered on
-      // top of the others.
-      selectedCell,
-    ];
-    setCells(updatedCellList);
+  function setSelectedCell(cellId?: string): void {
+    if (cellId === undefined) {
+      setCells((current) => {
+        return current.map((cell) => {
+          return {
+            ...cell,
+            selected: false,
+          };
+        });
+      });
+    } else {
+      const selectedCell = cells.find((cell) => cell.id === cellId)!;
+      selectedCell.selected = !selectedCell.selected;
+      const otherCells = cells.filter((cell) => cell.id !== selectedCell.id);
+      const updatedCellList = [
+        ...otherCells.map((cell) => {
+          return {
+            ...cell,
+            selected: false,
+          };
+        }),
+        // The selected cell is placed last to make sure that it is rendered on
+        // top of the others.
+        selectedCell,
+      ];
+      setCells(updatedCellList);
+    }
   }
 
-  function onCellSelected(cellId: string) {
+  function onCellSelected(cellId?: string) {
     setSelectedCell(cellId);
   }
 
