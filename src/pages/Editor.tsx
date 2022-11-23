@@ -66,10 +66,6 @@ function updateGridPosition({
 function Editor(): JSX.Element {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const [cells, setCells] = useState<Cell[]>([]);
-  const [editCellPosition, setEditCellPosition] = useState<{
-    x: number;
-    y: number;
-  }>();
 
   useEffect(() => {
     setCells(
@@ -128,9 +124,6 @@ function Editor(): JSX.Element {
         selectedCell,
       ];
       setCells(updatedCellList);
-      if (!selectedCell.selected) {
-        setEditCellPosition(undefined);
-      }
     }
   }
 
@@ -139,34 +132,27 @@ function Editor(): JSX.Element {
     if (!x || !y) {
       return;
     }
-    setEditCellPosition({ x: x, y: y });
   }
 
   const selectedCell = cells.find((cell) => cell.selected);
 
   return (
-    <div className='h-screen flex flex-col'>
-      <header className='w-screen bg-gray-600 flex justify-center items-center z-10 p-4 text-xl border-b border-black text-white'>
+    <div className='h-screen w-screen flex flex-col'>
+      <header className='p-4 flex border-b'>
         <h1>Grid Title</h1>
       </header>
-      <div className='flex-1 relative' ref={gridContainerRef}>
-        <Grid
-          onCellSelected={onCellSelected}
-          cells={cells}
-          width={gridContainerRef.current?.clientWidth || 0}
-          height={gridContainerRef.current?.clientHeight || 0}
-        />
-        {editCellPosition && selectedCell && (
-          <div
-            className='absolute w-64 bg-slate-600 text-white p-4'
-            style={{
-              left: editCellPosition.x,
-              top: editCellPosition.y,
-            }}
-          >
-            <p>{selectedCell.id}</p>
-          </div>
-        )}
+      <div className='h-screen flex'>
+        <div className='h-full w-[400px]'>
+          SelectedCell : {selectedCell ? selectedCell.id : 'nope'}
+        </div>
+        <div className='w-full' ref={gridContainerRef}>
+          <Grid
+            onCellSelected={onCellSelected}
+            cells={cells}
+            width={gridContainerRef.current?.clientWidth || 0}
+            height={gridContainerRef.current?.clientHeight || 0}
+          />
+        </div>
       </div>
     </div>
   );

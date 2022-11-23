@@ -12,8 +12,8 @@ interface Props {
 
 function Grid({ onCellSelected, cells, width, height }: Props): JSX.Element {
   function makeCellSelectedHandler(id: string) {
-    return function ({ evt }: Konva.KonvaEventObject<MouseEvent>) {
-      onCellSelected(id, evt.x, evt.offsetY);
+    return function () {
+      onCellSelected(id);
     };
   }
 
