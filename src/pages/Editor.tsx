@@ -66,6 +66,10 @@ function updateGridPosition({
 function Editor(): JSX.Element {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const [cells, setCells] = useState<Cell[]>([]);
+  const [editCellPosition, setEditCellPosition] = useState<{
+    x: number;
+    y: number;
+  }>();
 
   useEffect(() => {
     setCells(
@@ -124,11 +128,18 @@ function Editor(): JSX.Element {
         selectedCell,
       ];
       setCells(updatedCellList);
+      if (!selectedCell.selected) {
+        setEditCellPosition(undefined);
+      }
     }
   }
 
-  function onCellSelected(cellId?: string) {
+  function onCellSelected(cellId: string | undefined, x?: number, y?: number) {
     setSelectedCell(cellId);
+    if (!x || !y) {
+      return;
+    }
+    setEditCellPosition({ x: x, y: y });
   }
 
   return (
@@ -136,13 +147,24 @@ function Editor(): JSX.Element {
       <header className='w-screen bg-gray-600 flex justify-center items-center z-10 p-4 text-xl border-b border-black text-white'>
         <h1>Grid Title</h1>
       </header>
-      <div className='flex-1' ref={gridContainerRef}>
+      <div className='flex-1 relative' ref={gridContainerRef}>
         <Grid
           onCellSelected={onCellSelected}
           cells={cells}
           width={gridContainerRef.current?.clientWidth || 0}
           height={gridContainerRef.current?.clientHeight || 0}
         />
+        {editCellPosition && (
+          <div
+            className='absolute w-64 bg-slate-600 text-white p-4'
+            style={{
+              left: editCellPosition.x,
+              top: editCellPosition.y,
+            }}
+          >
+            <p>Hello, World!</p>
+          </div>
+        )}
       </div>
     </div>
   );

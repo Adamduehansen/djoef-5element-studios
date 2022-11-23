@@ -1,9 +1,10 @@
+import Konva from 'konva';
 import { Fragment } from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
 
 interface Props {
-  onCellSelected: (cellId?: string) => void;
+  onCellSelected: (cellId: string | undefined, x?: number, y?: number) => void;
   cells: Cell[];
   width: number;
   height: number;
@@ -11,8 +12,8 @@ interface Props {
 
 function Grid({ onCellSelected, cells, width, height }: Props): JSX.Element {
   function makeCellSelectedHandler(id: string) {
-    return function () {
-      onCellSelected(id);
+    return function ({ evt }: Konva.KonvaEventObject<MouseEvent>) {
+      onCellSelected(id, evt.x, evt.offsetY);
     };
   }
 
