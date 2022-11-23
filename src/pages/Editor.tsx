@@ -142,6 +142,8 @@ function Editor(): JSX.Element {
     setEditCellPosition({ x: x, y: y });
   }
 
+  const selectedCell = cells.find((cell) => cell.selected);
+
   return (
     <div className='h-screen flex flex-col'>
       <header className='w-screen bg-gray-600 flex justify-center items-center z-10 p-4 text-xl border-b border-black text-white'>
@@ -154,7 +156,7 @@ function Editor(): JSX.Element {
           width={gridContainerRef.current?.clientWidth || 0}
           height={gridContainerRef.current?.clientHeight || 0}
         />
-        {editCellPosition && (
+        {editCellPosition && selectedCell && (
           <div
             className='absolute w-64 bg-slate-600 text-white p-4'
             style={{
@@ -162,7 +164,7 @@ function Editor(): JSX.Element {
               top: editCellPosition.y,
             }}
           >
-            <p>Hello, World!</p>
+            <p>{selectedCell.id}</p>
           </div>
         )}
       </div>
