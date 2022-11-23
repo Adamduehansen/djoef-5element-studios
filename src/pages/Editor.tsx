@@ -28,6 +28,7 @@ function makeGridGenerator({
             shape: columnIndex === 1 ? 'circle' : undefined,
             y: y,
             x: x,
+            selected: false,
           };
         });
       })
@@ -100,8 +101,8 @@ function Editor(): JSX.Element {
 
   function setSelectedCell(cellId?: string): void {
     if (cellId === undefined) {
-      setCells((current) => {
-        return current.map((cell) => {
+      setCells((currentCells) => {
+        return currentCells.map((cell) => {
           return {
             ...cell,
             selected: false,
@@ -109,21 +110,23 @@ function Editor(): JSX.Element {
         });
       });
     } else {
-      const selectedCell = cells.find((cell) => cell.id === cellId)!;
-      selectedCell.selected = !selectedCell.selected;
-      const otherCells = cells.filter((cell) => cell.id !== selectedCell.id);
-      const updatedCellList = [
-        ...otherCells.map((cell) => {
-          return {
-            ...cell,
-            selected: false,
-          };
-        }),
-        // The selected cell is placed last to make sure that it is rendered on
-        // top of the others.
-        selectedCell,
-      ];
-      setCells(updatedCellList);
+      setCells((currentCells) =>
+        currentCells
+          .map((cell) => {
+            if (cell.id !== cellId) {
+              return {
+                ...cell,
+                selected: false,
+              };
+            } else {
+              return {
+                ...cell,
+                selected: !cell.selected,
+              };
+            }
+          })
+          .sort((cell) => (cell.selected ? 1 : -1))
+      );
     }
   }
 
