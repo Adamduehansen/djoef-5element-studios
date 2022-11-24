@@ -1,7 +1,8 @@
 import Konva from 'konva';
-import React, { Fragment, useRef } from 'react';
-import { Circle, Layer, Rect, Stage } from 'react-konva';
+import React, { Fragment } from 'react';
+import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
+import ShapeFactory from './Shape';
 
 interface Props {
   onCellSelected: (cellId: string | undefined, x?: number, y?: number) => void;
@@ -35,15 +36,7 @@ const Grid = React.forwardRef<Konva.Stage, Props>(
             const cellSize = 100;
             return (
               <Fragment key={cell.id}>
-                {cell.shape && (
-                  <Circle
-                    width={cellSize}
-                    height={cellSize}
-                    x={cell.x + cellSize / 2}
-                    y={cell.y + cellSize / 2}
-                    stroke='black'
-                  />
-                )}
+                {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
                 <Rect
                   key={cell.id}
                   width={cellSize}

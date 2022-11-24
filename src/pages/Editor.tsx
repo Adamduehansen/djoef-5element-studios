@@ -37,7 +37,7 @@ function makeGridGenerator({
           return {
             id: `${rowIndex}-${columnIndex}`,
             color: '',
-            shape: columnIndex === 1 ? 'circle' : undefined,
+            shape: undefined,
             y: y,
             x: x,
             selected: false,
@@ -172,7 +172,7 @@ function Editor(): JSX.Element {
   const selectedCell = cells.find((cell) => cell.selected);
 
   return (
-    <div className='h-screen w-screen flex flex-col'>
+    <div className='h-screen w-screen flex flex-col relative'>
       <header className='p-4 flex border-b'>
         <h1>Grid Title</h1>
       </header>
@@ -182,14 +182,6 @@ function Editor(): JSX.Element {
             cell={selectedCell}
             onShapeChange={onCellShapeChanged}
           />
-          <button
-            onClick={async () => {
-              const uri = gridRef.current!.toDataURL();
-              downloadURI(uri, 'title');
-            }}
-          >
-            Download
-          </button>
         </div>
         <div className='w-full' ref={gridContainerRef}>
           <Grid
@@ -201,6 +193,15 @@ function Editor(): JSX.Element {
           />
         </div>
       </div>
+      <button
+        className='absolute right-2 bottom-2'
+        onClick={async () => {
+          const uri = gridRef.current!.toDataURL();
+          downloadURI(uri, 'title');
+        }}
+      >
+        Download
+      </button>
     </div>
   );
 }
