@@ -2,11 +2,12 @@ import Shape from './Shape';
 
 interface Cell {
   id: string;
-  color?: string;
-  shape?: Shape;
-  selected?: boolean;
   x: number;
   y: number;
+  selected?: boolean;
+  color?: string;
+  shape?: Shape;
+  background?: string;
 }
 
 export default Cell;

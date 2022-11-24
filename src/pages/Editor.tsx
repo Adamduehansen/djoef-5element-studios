@@ -184,6 +184,21 @@ function Editor(): JSX.Element {
     });
   }
 
+  function onCellBackgroundChange(cellId: string, color: string) {
+    setCells((currentCells) => {
+      return currentCells.map((cell) => {
+        if (cell.id !== cellId) {
+          return cell;
+        } else {
+          return {
+            ...cell,
+            background: color,
+          };
+        }
+      });
+    });
+  }
+
   const selectedCell = cells.find((cell) => cell.selected);
 
   return (
@@ -197,6 +212,7 @@ function Editor(): JSX.Element {
             cell={selectedCell}
             onShapeChange={onCellShapeChange}
             onColorChange={onCellColorChange}
+            onBackgroundChange={onCellBackgroundChange}
           />
         </div>
         <div className='w-full' ref={gridContainerRef}>

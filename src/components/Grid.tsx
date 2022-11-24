@@ -36,6 +36,15 @@ const Grid = React.forwardRef<Konva.Stage, Props>(
             const cellSize = 100;
             return (
               <Fragment key={cell.id}>
+                {cell.background && (
+                  <Rect
+                    width={cellSize}
+                    height={cellSize}
+                    x={cell.x}
+                    y={cell.y}
+                    fill={cell.background}
+                  />
+                )}
                 {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
                 <Rect
                   key={cell.id}

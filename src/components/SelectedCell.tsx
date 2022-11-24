@@ -7,6 +7,7 @@ interface Props {
   cell?: Cell;
   onShapeChange: (cellId: string, shape: Shape) => void;
   onColorChange: (cellId: string, color: string) => void;
+  onBackgroundChange: (cellId: string, color: string) => void;
 }
 
 const shapeDictionary = new Map<Shape, string>();
@@ -33,6 +34,7 @@ function SelectedCell({
   cell,
   onShapeChange,
   onColorChange,
+  onBackgroundChange,
 }: Props): JSX.Element | null {
   if (!cell) {
     return <div>Vælg en celle</div>;
@@ -44,6 +46,10 @@ function SelectedCell({
 
   function handleOnColorChange(color: string) {
     onColorChange(cell!.id, color);
+  }
+
+  function handleBackgroundChange(color: string) {
+    onBackgroundChange(cell!.id, color);
   }
 
   return (
@@ -68,8 +74,25 @@ function SelectedCell({
         </Listbox>
       </div>
       <div>
-        <Listbox value={cell.color} onChange={handleOnColorChange}>
+        <Listbox
+          value={cell.color}
+          onChange={handleOnColorChange}
+          disabled={cell.shape ? false : true}
+        >
           <Listbox.Button>Farve: {cell.color || 'Ikke valgt'}</Listbox.Button>
+          <Listbox.Options>
+            <ListBoxOption text='Ingen' value={undefined} />
+            {['red', 'green', 'blue'].map((color) => {
+              return <ListBoxOption key={color} value={color} text={color} />;
+            })}
+          </Listbox.Options>
+        </Listbox>
+      </div>
+      <div>
+        <Listbox value={cell.background} onChange={handleBackgroundChange}>
+          <Listbox.Button>
+            Baggrund: {cell.background || 'Ikke valgt'}
+          </Listbox.Button>
           <Listbox.Options>
             <ListBoxOption text='Ingen' value={undefined} />
             {['red', 'green', 'blue'].map((color) => {
