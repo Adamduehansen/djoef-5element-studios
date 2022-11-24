@@ -81,6 +81,7 @@ function Editor(): JSX.Element {
   const gridRef = useRef<Konva.Stage>(null);
   const [cells, setCells] = useState<Cell[]>([]);
   const [showGrid, setShowGrid] = useState(true);
+  const [docTitle, setDocTitle] = useState('ny');
 
   useEffect(() => {
     setCells(
@@ -205,7 +206,13 @@ function Editor(): JSX.Element {
   return (
     <div className='h-screen w-screen flex flex-col relative'>
       <header className='p-4 flex border-b'>
-        <h1>Grid Title</h1>
+        <input
+          type='text'
+          value={docTitle}
+          onChange={(event) => {
+            setDocTitle(event.target.value);
+          }}
+        />
       </header>
       <div className='h-screen flex'>
         <div className='h-full w-[300px] flex flex-col justify-between border-r'>
@@ -233,7 +240,7 @@ function Editor(): JSX.Element {
             <button
               onClick={async () => {
                 const uri = gridRef.current!.toDataURL();
-                downloadURI(uri, 'title');
+                downloadURI(uri, docTitle);
               }}
             >
               Download
