@@ -1,4 +1,3 @@
-import Konva from 'konva';
 import { Fragment } from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
@@ -46,7 +45,7 @@ function Grid({ onCellSelected, cells, width, height }: Props): JSX.Element {
                 key={cell.id}
                 width={cellSize}
                 height={cellSize}
-                stroke={cell.selected ? 'yellow' : 'black'}
+                stroke={cell.selected ? 'yellow' : 'lightgrey'}
                 x={cell.x}
                 y={cell.y}
                 onClick={makeCellSelectedHandler(cell.id)}

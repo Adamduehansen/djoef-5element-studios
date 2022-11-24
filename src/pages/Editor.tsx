@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
 import type Cell from '../lib/Cell';
+import Shape from '../lib/Shape';
 
 interface GenerateGridOptions {
   rows: number;
@@ -131,11 +132,30 @@ function Editor(): JSX.Element {
     }
   }
 
-  function onCellSelected(cellId: string | undefined, x?: number, y?: number) {
+  function onCellSelected(
+    cellId: string | undefined,
+    x?: number,
+    y?: number
+  ): void {
     setSelectedCell(cellId);
     if (!x || !y) {
       return;
     }
+  }
+
+  function onCellShapeChanged(cellId: string, shape: Shape): void {
+    setCells((currentCells) => {
+      return currentCells.map((cell) => {
+        if (cell.id !== cellId) {
+          return cell;
+        } else {
+          return {
+            ...cell,
+            shape: shape,
+          };
+        }
+      });
+    });
   }
 
   const selectedCell = cells.find((cell) => cell.selected);
@@ -149,9 +169,7 @@ function Editor(): JSX.Element {
         <div className='h-full w-[400px] border-r'>
           <SelectedCell
             cell={selectedCell}
-            onShapeChange={(shape) => {
-              console.log(shape);
-            }}
+            onShapeChange={onCellShapeChanged}
           />
         </div>
         <div className='w-full' ref={gridContainerRef}>

@@ -5,7 +5,7 @@ import Shape, { shapes } from '../lib/Shape';
 
 interface Props {
   cell?: Cell;
-  onShapeChange: (shape: Shape) => void;
+  onShapeChange: (cellId: string, shape: Shape) => void;
 }
 
 const shapeDictionary = new Map<Shape, string>();
@@ -15,14 +15,14 @@ shapeDictionary.set('triangle', 'Trekant');
 
 interface ListBoxOptionProps {
   text: string;
-  value: string;
+  value: string | undefined;
 }
 
 function ListBoxOption({ text, value }: ListBoxOptionProps): JSX.Element {
   return (
     <Listbox.Option value={value} as={Fragment}>
-      {({ active }) => (
-        <li className={active ? 'text-green-500' : 'text-red-500'}>{text}</li>
+      {({ active, selected }) => (
+        <li className={selected ? 'text-green-500' : 'text-red-500'}>{text}</li>
       )}
     </Listbox.Option>
   );
@@ -33,23 +33,25 @@ function SelectedCell({ cell, onShapeChange }: Props): JSX.Element | null {
     return <div>Vælg en celle</div>;
   }
 
+  function makeOnShapeChange(shape: Shape) {
+    onShapeChange(cell!.id, shape);
+  }
+
   return (
     <div>
-      <Listbox value={cell.shape || 'none'} onChange={onShapeChange}>
+      <Listbox value={cell.shape || 'none'} onChange={makeOnShapeChange}>
         <Listbox.Button>
           Figur: {cell.shape ? shapeDictionary.get(cell.shape) : 'Ikke valgt'}
         </Listbox.Button>
         <Listbox.Options>
-          <ListBoxOption text='Ingen' value='none' />
+          <ListBoxOption text='Ingen' value={undefined} />
           {shapes.map((shape) => {
             return (
-              <Listbox.Option key={shape} value={shape} as={Fragment}>
-                {({ active }) => (
-                  <li className={active ? 'text-green-500' : 'text-red-500'}>
-                    {shapeDictionary.get(shape)}
-                  </li>
-                )}
-              </Listbox.Option>
+              <ListBoxOption
+                key={shape}
+                value={shape}
+                text={shapeDictionary.get(shape) || ''}
+              />
             );
           })}
         </Listbox.Options>
