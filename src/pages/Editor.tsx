@@ -1,3 +1,4 @@
+import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
 import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
@@ -9,6 +10,15 @@ interface GenerateGridOptions {
   columns: number;
   centerX: number;
   centerY: number;
+}
+
+function downloadURI(uri: string, name: string) {
+  var link = document.createElement('a');
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function makeGridGenerator({
@@ -68,6 +78,7 @@ function updateGridPosition({
 
 function Editor(): JSX.Element {
   const gridContainerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<Konva.Stage>(null);
   const [cells, setCells] = useState<Cell[]>([]);
 
   useEffect(() => {
@@ -171,9 +182,18 @@ function Editor(): JSX.Element {
             cell={selectedCell}
             onShapeChange={onCellShapeChanged}
           />
+          <button
+            onClick={async () => {
+              const uri = gridRef.current!.toDataURL();
+              downloadURI(uri, 'title');
+            }}
+          >
+            Download
+          </button>
         </div>
         <div className='w-full' ref={gridContainerRef}>
           <Grid
+            ref={gridRef}
             onCellSelected={onCellSelected}
             cells={cells}
             width={gridContainerRef.current?.clientWidth || 0}
