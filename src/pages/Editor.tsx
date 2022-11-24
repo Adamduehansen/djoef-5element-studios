@@ -80,6 +80,7 @@ function Editor(): JSX.Element {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<Konva.Stage>(null);
   const [cells, setCells] = useState<Cell[]>([]);
+  const [showGrid, setShowGrid] = useState(true);
 
   useEffect(() => {
     setCells(
@@ -207,13 +208,37 @@ function Editor(): JSX.Element {
         <h1>Grid Title</h1>
       </header>
       <div className='h-screen flex'>
-        <div className='h-full w-[300px] border-r'>
-          <SelectedCell
-            cell={selectedCell}
-            onShapeChange={onCellShapeChange}
-            onColorChange={onCellColorChange}
-            onBackgroundChange={onCellBackgroundChange}
-          />
+        <div className='h-full w-[300px] flex flex-col justify-between border-r'>
+          <div>
+            <SelectedCell
+              cell={selectedCell}
+              onShapeChange={onCellShapeChange}
+              onColorChange={onCellColorChange}
+              onBackgroundChange={onCellBackgroundChange}
+            />
+          </div>
+          <div className='border-t'>
+            <div>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={showGrid}
+                  onChange={() => {
+                    setShowGrid((current) => !current);
+                  }}
+                />
+                Vis gitter
+              </label>
+            </div>
+            <button
+              onClick={async () => {
+                const uri = gridRef.current!.toDataURL();
+                downloadURI(uri, 'title');
+              }}
+            >
+              Download
+            </button>
+          </div>
         </div>
         <div className='w-full' ref={gridContainerRef}>
           <Grid
@@ -222,18 +247,10 @@ function Editor(): JSX.Element {
             cells={cells}
             width={gridContainerRef.current?.clientWidth || 0}
             height={gridContainerRef.current?.clientHeight || 0}
+            showGrid={showGrid}
           />
         </div>
       </div>
-      <button
-        className='absolute right-2 bottom-2'
-        onClick={async () => {
-          const uri = gridRef.current!.toDataURL();
-          downloadURI(uri, 'title');
-        }}
-      >
-        Download
-      </button>
     </div>
   );
 }

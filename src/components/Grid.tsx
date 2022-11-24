@@ -9,10 +9,11 @@ interface Props {
   cells: Cell[];
   width: number;
   height: number;
+  showGrid: boolean;
 }
 
 const Grid = React.forwardRef<Konva.Stage, Props>(
-  ({ onCellSelected, cells, width, height }, ref) => {
+  ({ onCellSelected, cells, width, height, showGrid }, ref) => {
     function makeCellSelectedHandler(id: string) {
       return function () {
         onCellSelected(id);
@@ -51,6 +52,7 @@ const Grid = React.forwardRef<Konva.Stage, Props>(
                   width={cellSize}
                   height={cellSize}
                   stroke={cell.selected ? 'yellow' : 'lightgrey'}
+                  strokeEnabled={showGrid}
                   x={cell.x}
                   y={cell.y}
                   onClick={makeCellSelectedHandler(cell.id)}
