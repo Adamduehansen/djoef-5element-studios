@@ -20,6 +20,13 @@ const Grid = React.forwardRef<Konva.Stage, Props>(
       };
     }
 
+    function makeMouseCursorChange(cursor: string) {
+      return function (event: Konva.KonvaEventObject<MouseEvent>) {
+        const container = event.target.getStage()!.container();
+        container.style.cursor = cursor;
+      };
+    }
+
     return (
       <Stage
         ref={ref}
@@ -32,7 +39,10 @@ const Grid = React.forwardRef<Konva.Stage, Props>(
           }
         }}
       >
-        <Layer>
+        <Layer
+          onMouseEnter={makeMouseCursorChange('pointer')}
+          onMouseLeave={makeMouseCursorChange('default')}
+        >
           {cells.map((cell) => {
             const cellSize = 100;
             return (
@@ -51,7 +61,7 @@ const Grid = React.forwardRef<Konva.Stage, Props>(
                   key={cell.id}
                   width={cellSize}
                   height={cellSize}
-                  stroke={cell.selected ? 'yellow' : 'lightgrey'}
+                  stroke={cell.selected ? 'grey' : 'lightgrey'}
                   strokeEnabled={showGrid}
                   x={cell.x}
                   y={cell.y}
