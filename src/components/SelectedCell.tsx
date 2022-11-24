@@ -55,7 +55,7 @@ function SelectedCell({
   return (
     <>
       <div>
-        <Listbox value={cell.shape} onChange={handleOnShapeChange}>
+        <Listbox value={cell.shape || ''} onChange={handleOnShapeChange}>
           <Listbox.Button>
             Figur: {cell.shape ? shapeDictionary.get(cell.shape) : 'Ikke valgt'}
           </Listbox.Button>
@@ -75,7 +75,7 @@ function SelectedCell({
       </div>
       <div>
         <Listbox
-          value={cell.color}
+          value={cell.color || ''}
           onChange={handleOnColorChange}
           disabled={cell.shape ? false : true}
         >
@@ -89,7 +89,10 @@ function SelectedCell({
         </Listbox>
       </div>
       <div>
-        <Listbox value={cell.background} onChange={handleBackgroundChange}>
+        <Listbox
+          value={cell.background || ''}
+          onChange={handleBackgroundChange}
+        >
           <Listbox.Button>
             Baggrund: {cell.background || 'Ikke valgt'}
           </Listbox.Button>
