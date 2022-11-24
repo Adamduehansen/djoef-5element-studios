@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Grid from '../components/Grid';
+import SelectedCell from '../components/SelectedCell';
 import type Cell from '../lib/Cell';
 
 interface GenerateGridOptions {
@@ -145,8 +146,13 @@ function Editor(): JSX.Element {
         <h1>Grid Title</h1>
       </header>
       <div className='h-screen flex'>
-        <div className='h-full w-[400px]'>
-          SelectedCell : {selectedCell ? selectedCell.id : 'nope'}
+        <div className='h-full w-[400px] border-r'>
+          <SelectedCell
+            cell={selectedCell}
+            onShapeChange={(shape) => {
+              console.log(shape);
+            }}
+          />
         </div>
         <div className='w-full' ref={gridContainerRef}>
           <Grid

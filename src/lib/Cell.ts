@@ -1,6 +1,6 @@
-type Shape = 'circle';
+import Shape from './Shape';
 
-export default interface Cell {
+interface Cell {
   id: string;
   color: string;
   shape?: Shape;
@@ -8,3 +8,5 @@ export default interface Cell {
   x: number;
   y: number;
 }
+
+export default Cell;
