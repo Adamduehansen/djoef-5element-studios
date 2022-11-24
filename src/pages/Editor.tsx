@@ -154,7 +154,7 @@ function Editor(): JSX.Element {
     }
   }
 
-  function onCellShapeChanged(cellId: string, shape: Shape): void {
+  function onCellShapeChange(cellId: string, shape: Shape): void {
     setCells((currentCells) => {
       return currentCells.map((cell) => {
         if (cell.id !== cellId) {
@@ -169,6 +169,21 @@ function Editor(): JSX.Element {
     });
   }
 
+  function onCellColorChange(cellId: string, color: string) {
+    setCells((currentCells) => {
+      return currentCells.map((cell) => {
+        if (cell.id !== cellId) {
+          return cell;
+        } else {
+          return {
+            ...cell,
+            color: color,
+          };
+        }
+      });
+    });
+  }
+
   const selectedCell = cells.find((cell) => cell.selected);
 
   return (
@@ -177,10 +192,11 @@ function Editor(): JSX.Element {
         <h1>Grid Title</h1>
       </header>
       <div className='h-screen flex'>
-        <div className='h-full w-[400px] border-r'>
+        <div className='h-full w-[300px] border-r'>
           <SelectedCell
             cell={selectedCell}
-            onShapeChange={onCellShapeChanged}
+            onShapeChange={onCellShapeChange}
+            onColorChange={onCellColorChange}
           />
         </div>
         <div className='w-full' ref={gridContainerRef}>

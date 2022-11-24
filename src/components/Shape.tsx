@@ -21,7 +21,7 @@ function Triangle({ cell, width }: ShapeProps): JSX.Element {
         context.closePath();
         context.fillStrokeShape(shape);
       }}
-      stroke='black'
+      fill={cell.color}
     />
   );
 }
@@ -39,7 +39,7 @@ function Arc({ cell, width }: ShapeProps): JSX.Element {
         context.closePath();
         context.fillStrokeShape(shape);
       }}
-      stroke='black'
+      fill={cell.color}
     />
   );
 }
@@ -51,7 +51,7 @@ function Circle({ cell, width }: ShapeProps): JSX.Element {
       height={width}
       x={cell.x + width / 2}
       y={cell.y + width / 2}
-      stroke='black'
+      fill={cell.color}
     />
   );
 }
