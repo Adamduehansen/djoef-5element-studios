@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
@@ -7,7 +7,7 @@ import ShapeFactory from './Shape';
 
 const CELL_WIDTH = 100;
 
-interface GridCell extends Cell {
+export interface GridCell extends Cell {
   x: number;
   y: number;
   selected: boolean;

@@ -1,10 +1,10 @@
 import { ComponentType } from 'react';
 import { Shape as KonvaShape, Circle as KonvaCircle } from 'react-konva';
-import Cell from '../lib/Cell';
 import Shape from '../lib/Shape';
+import { GridCell } from './Grid';
 
 interface ShapeProps {
-  cell: Cell;
+  cell: GridCell;
   width: number;
 }
 

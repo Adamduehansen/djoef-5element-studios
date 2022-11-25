@@ -1,11 +1,9 @@
 import Konva from 'konva';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import EditorHeader from '../components/EditorHeader';
 import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
-import type Cell from '../lib/Cell';
 import DocumentProvider from '../lib/DocumentProvider';
-import Shape from '../lib/Shape';
 
 interface GenerateGridOptions {
   rows: number;

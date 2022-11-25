@@ -1,6 +1,5 @@
 import { Listbox } from '@headlessui/react';
 import { Fragment } from 'react';
-import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
 import Shape, { shapes } from '../lib/Shape';
 
