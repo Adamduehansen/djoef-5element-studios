@@ -1,8 +1,10 @@
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
+import EditorHeader from '../components/EditorHeader';
 import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
 import type Cell from '../lib/Cell';
+import DocumentProvider from '../lib/DocumentProvider';
 import Shape from '../lib/Shape';
 
 interface GenerateGridOptions {
@@ -10,15 +12,6 @@ interface GenerateGridOptions {
   columns: number;
   centerX: number;
   centerY: number;
-}
-
-function downloadURI(uri: string, name: string) {
-  var link = document.createElement('a');
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }
 
 function makeGridGenerator({
@@ -80,8 +73,6 @@ function Editor(): JSX.Element {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<Konva.Stage>(null);
   const [cells, setCells] = useState<Cell[]>([]);
-  const [showGrid, setShowGrid] = useState(true);
-  const [docTitle, setDocTitle] = useState('ny');
 
   useEffect(() => {
     setCells(
@@ -204,19 +195,11 @@ function Editor(): JSX.Element {
   const selectedCell = cells.find((cell) => cell.selected);
 
   return (
-    <div className='h-screen w-screen flex flex-col relative'>
-      <header className='p-4 flex border-b'>
-        <input
-          type='text'
-          value={docTitle}
-          onChange={(event) => {
-            setDocTitle(event.target.value);
-          }}
-        />
-      </header>
-      <div className='h-screen flex'>
-        <div className='h-full w-[300px] flex flex-col justify-between border-r'>
-          <div>
+    <DocumentProvider>
+      <div className='h-screen w-screen flex flex-col relative'>
+        <EditorHeader stage={gridRef.current!} />
+        <div className='h-screen flex'>
+          <div className='h-full w-[300px] border-r'>
             <SelectedCell
               cell={selectedCell}
               onShapeChange={onCellShapeChange}
@@ -224,41 +207,18 @@ function Editor(): JSX.Element {
               onBackgroundChange={onCellBackgroundChange}
             />
           </div>
-          <div className='border-t'>
-            <div>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={showGrid}
-                  onChange={() => {
-                    setShowGrid((current) => !current);
-                  }}
-                />
-                Vis gitter
-              </label>
-            </div>
-            <button
-              onClick={async () => {
-                const uri = gridRef.current!.toDataURL();
-                downloadURI(uri, docTitle);
-              }}
-            >
-              Download
-            </button>
+          <div className='w-full' ref={gridContainerRef}>
+            <Grid
+              ref={gridRef}
+              onCellSelected={onCellSelected}
+              cells={cells}
+              width={gridContainerRef.current?.clientWidth || 0}
+              height={gridContainerRef.current?.clientHeight || 0}
+            />
           </div>
         </div>
-        <div className='w-full' ref={gridContainerRef}>
-          <Grid
-            ref={gridRef}
-            onCellSelected={onCellSelected}
-            cells={cells}
-            width={gridContainerRef.current?.clientWidth || 0}
-            height={gridContainerRef.current?.clientHeight || 0}
-            showGrid={showGrid}
-          />
-        </div>
       </div>
-    </div>
+    </DocumentProvider>
   );
 }
 

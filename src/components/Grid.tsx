@@ -2,6 +2,7 @@ import Konva from 'konva';
 import React, { Fragment } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
+import { useDocument } from '../lib/DocumentProvider';
 import ShapeFactory from './Shape';
 
 interface Props {
@@ -9,11 +10,12 @@ interface Props {
   cells: Cell[];
   width: number;
   height: number;
-  showGrid: boolean;
 }
 
 const Grid = React.forwardRef<Konva.Stage, Props>(
-  ({ onCellSelected, cells, width, height, showGrid }, ref) => {
+  ({ onCellSelected, cells, width, height }, ref) => {
+    const { showGrid } = useDocument();
+
     function makeCellSelectedHandler(id: string) {
       return function () {
         onCellSelected(id);

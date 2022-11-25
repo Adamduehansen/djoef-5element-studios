@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: '/editor',
+    path: '/editor/:id',
     element: <Editor />,
   },
 ]);
