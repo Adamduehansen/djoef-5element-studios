@@ -1,81 +1,114 @@
 import Konva from 'konva';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
 import ShapeFactory from './Shape';
 
-interface Props {
-  onCellSelected: (cellId: string | undefined, x?: number, y?: number) => void;
-  cells: Cell[];
-  width: number;
-  height: number;
+const CELL_WIDTH = 100;
+
+interface GridCell extends Cell {
+  x: number;
+  y: number;
+  selected: boolean;
 }
 
-const Grid = React.forwardRef<Konva.Stage, Props>(
-  ({ onCellSelected, cells, width, height }, ref) => {
-    const { showGrid } = useDocument();
+function makeGridCells(
+  cells: Cell[],
+  col: number,
+  selectedCellId?: string
+): () => GridCell[] {
+  return function () {
+    let colIndex = 0;
+    let rowIndex = 0;
 
-    function makeCellSelectedHandler(id: string) {
-      return function () {
-        onCellSelected(id);
-      };
-    }
+    return cells
+      .map((cell): GridCell => {
+        const x = colIndex * CELL_WIDTH;
+        const y = rowIndex * CELL_WIDTH;
 
-    function makeMouseCursorChange(cursor: string) {
-      return function (event: Konva.KonvaEventObject<MouseEvent>) {
-        const container = event.target.getStage()!.container();
-        container.style.cursor = cursor;
-      };
-    }
+        colIndex += 1;
 
-    return (
-      <Stage
-        ref={ref}
-        width={width}
-        height={height}
-        id='background'
-        onClick={({ target }) => {
-          if (target.id() === 'background') {
-            onCellSelected(undefined);
-          }
-        }}
-      >
-        <Layer
-          onMouseEnter={makeMouseCursorChange('pointer')}
-          onMouseLeave={makeMouseCursorChange('default')}
-        >
-          {cells.map((cell) => {
-            const cellSize = 100;
-            return (
-              <Fragment key={cell.id}>
-                {cell.background && (
-                  <Rect
-                    width={cellSize}
-                    height={cellSize}
-                    x={cell.x}
-                    y={cell.y}
-                    fill={cell.background}
-                  />
-                )}
-                {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
+        if (colIndex >= col) {
+          colIndex = 0;
+          rowIndex += 1;
+        }
+
+        return {
+          ...cell,
+          x: x,
+          y: y,
+          selected: selectedCellId === cell.id,
+        };
+      })
+      .sort((cell) => (cell.selected ? 1 : -1));
+  };
+}
+
+const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
+  const {
+    showGrid,
+    gridColumns,
+    gridRows,
+    cells,
+    setSelectedCellId,
+    selectedCellId,
+  } = useDocument();
+
+  const gridCells = makeGridCells(cells, gridColumns, selectedCellId)();
+
+  function makeCellSelectedHandler(id: string) {
+    return function () {
+      setSelectedCellId(id);
+    };
+  }
+
+  function makeMouseCursorChange(cursor: string) {
+    return function (event: Konva.KonvaEventObject<MouseEvent>) {
+      const container = event.target.getStage()!.container();
+      container.style.cursor = cursor;
+    };
+  }
+
+  return (
+    <Stage
+      ref={ref}
+      id='background'
+      width={gridColumns * CELL_WIDTH}
+      height={gridRows * CELL_WIDTH}
+      onMouseEnter={makeMouseCursorChange('pointer')}
+      onMouseLeave={makeMouseCursorChange('default')}
+    >
+      <Layer>
+        {gridCells.map((cell) => {
+          return (
+            <Fragment key={cell.id}>
+              {cell.background && (
                 <Rect
-                  key={cell.id}
-                  width={cellSize}
-                  height={cellSize}
-                  stroke={cell.selected ? 'grey' : 'lightgrey'}
-                  strokeEnabled={showGrid}
+                  width={CELL_WIDTH}
+                  height={CELL_WIDTH}
                   x={cell.x}
                   y={cell.y}
-                  onClick={makeCellSelectedHandler(cell.id)}
+                  fill={cell.background}
                 />
-              </Fragment>
-            );
-          })}
-        </Layer>
-      </Stage>
-    );
-  }
-);
+              )}
+              {cell.shape && <ShapeFactory cell={cell} width={CELL_WIDTH} />}
+              <Rect
+                key={cell.id}
+                width={CELL_WIDTH}
+                height={CELL_WIDTH}
+                stroke={cell.selected ? 'grey' : 'lightgrey'}
+                strokeEnabled={showGrid}
+                x={cell.x}
+                y={cell.y}
+                onClick={makeCellSelectedHandler(cell.id)}
+              />
+            </Fragment>
+          );
+        })}
+      </Layer>
+    </Stage>
+  );
+});
 
 export default Grid;

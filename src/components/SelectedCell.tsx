@@ -1,14 +1,8 @@
 import { Listbox } from '@headlessui/react';
 import { Fragment } from 'react';
 import type Cell from '../lib/Cell';
+import { useDocument } from '../lib/DocumentProvider';
 import Shape, { shapes } from '../lib/Shape';
-
-interface Props {
-  cell?: Cell;
-  onShapeChange: (cellId: string, shape: Shape) => void;
-  onColorChange: (cellId: string, color: string) => void;
-  onBackgroundChange: (cellId: string, color: string) => void;
-}
 
 const shapeDictionary = new Map<Shape, string>();
 shapeDictionary.set('arc', 'Bue');
@@ -30,34 +24,45 @@ function ListBoxOption({ text, value }: ListBoxOptionProps): JSX.Element {
   );
 }
 
-function SelectedCell({
-  cell,
-  onShapeChange,
-  onColorChange,
-  onBackgroundChange,
-}: Props): JSX.Element | null {
-  if (!cell) {
+function SelectedCell(): JSX.Element | null {
+  const {
+    selectedCellId,
+    cells,
+    setCellShape,
+    setCellColor,
+    setCellBackground,
+  } = useDocument();
+
+  if (!selectedCellId) {
     return <div>Vælg en celle</div>;
   }
 
   function handleOnShapeChange(shape: Shape) {
-    onShapeChange(cell!.id, shape);
+    setCellShape(selectedCellId!, shape);
   }
 
   function handleOnColorChange(color: string) {
-    onColorChange(cell!.id, color);
+    setCellColor(selectedCellId!, color);
   }
 
   function handleBackgroundChange(color: string) {
-    onBackgroundChange(cell!.id, color);
+    setCellBackground(selectedCellId!, color);
   }
+
+  const selectedCell = cells.find((cells) => cells.id === selectedCellId)!;
 
   return (
     <>
       <div>
-        <Listbox value={cell.shape || ''} onChange={handleOnShapeChange}>
+        <Listbox
+          value={selectedCell.shape || ''}
+          onChange={handleOnShapeChange}
+        >
           <Listbox.Button>
-            Figur: {cell.shape ? shapeDictionary.get(cell.shape) : 'Ikke valgt'}
+            Figur:
+            {selectedCell.shape
+              ? shapeDictionary.get(selectedCell.shape)
+              : 'Ikke valgt'}
           </Listbox.Button>
           <Listbox.Options>
             <ListBoxOption text='Ingen' value={undefined} />
@@ -75,11 +80,13 @@ function SelectedCell({
       </div>
       <div>
         <Listbox
-          value={cell.color || ''}
+          value={selectedCell.color || ''}
           onChange={handleOnColorChange}
-          disabled={cell.shape ? false : true}
+          disabled={selectedCell.shape ? false : true}
         >
-          <Listbox.Button>Farve: {cell.color || 'Ikke valgt'}</Listbox.Button>
+          <Listbox.Button>
+            Farve: {selectedCell.color || 'Ikke valgt'}
+          </Listbox.Button>
           <Listbox.Options>
             <ListBoxOption text='Ingen' value={undefined} />
             {['red', 'green', 'blue'].map((color) => {
@@ -90,11 +97,11 @@ function SelectedCell({
       </div>
       <div>
         <Listbox
-          value={cell.background || ''}
+          value={selectedCell.background || ''}
           onChange={handleBackgroundChange}
         >
           <Listbox.Button>
-            Baggrund: {cell.background || 'Ikke valgt'}
+            Baggrund: {selectedCell.background || 'Ikke valgt'}
           </Listbox.Button>
           <Listbox.Options>
             <ListBoxOption text='Ingen' value={undefined} />
