@@ -1,71 +1,51 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Document, { DocumentProps } from '../contexts/Document';
+import Document from '../contexts/Document';
 import Cell from './Cell';
 import Shape from './Shape';
+import {
+  getDocument,
+  addNewDocument,
+  DocumentDto,
+  updateTitleOfDocument,
+} from './db';
 
-type DocumentDto = Pick<
-  DocumentProps,
-  'title' | 'cells' | 'gridRows' | 'gridColumns'
->;
+function DocumentProvider({
+  children,
+}: React.PropsWithChildren): JSX.Element | null {
+  const [title, setTitle] = useState<string>();
+  const [showGrid, setShowGrid] = useState(true);
+  const [cells, setCells] = useState<Cell[]>([]);
+  const [selectedCellId, setSelectedCellId] = useState<string>();
+  const [document, setDocument] = useState<DocumentDto>();
 
-function getDocument(id?: string): DocumentDto {
-  return {
-    title: 'Hello, World!',
-    cells: [
-      {
-        id: '1',
-        shape: 'arc',
-        color: 'red',
-        rotation: 0,
-      },
-      {
-        id: '2',
-        rotation: 0,
-      },
-      {
-        id: '3',
-        rotation: 0,
-      },
-      {
-        id: '4',
-        rotation: 0,
-      },
-      {
-        id: '5',
-        rotation: 0,
-      },
-      {
-        id: '6',
-        rotation: 0,
-      },
-      {
-        id: '7',
-        rotation: 0,
-      },
-      {
-        id: '8',
-        rotation: 0,
-      },
-      {
-        id: '9',
-        rotation: 0,
-      },
-    ],
-    gridColumns: 3,
-    gridRows: 3,
-  };
-}
-
-function DocumentProvider({ children }: React.PropsWithChildren): JSX.Element {
   const { id } = useParams();
 
-  const document = getDocument(id);
+  useEffect(() => {
+    async function initDocument() {
+      const documentDto = await getDocument(id!);
 
-  const [title, setTitle] = useState(document.title);
-  const [showGrid, setShowGrid] = useState(true);
-  const [cells, setCells] = useState<Cell[]>(document.cells);
-  const [selectedCellId, setSelectedCellId] = useState<string>();
+      if (!documentDto) {
+        throw new Error(`Document not found for id: ${id}`);
+      }
+
+      setDocument(documentDto);
+      setTitle(documentDto!.title);
+      setCells(documentDto!.cells);
+    }
+    initDocument();
+  }, []);
+
+  useEffect(() => {
+    if (!title) {
+      return;
+    }
+    updateTitleOfDocument(id!, title);
+  }, [title]);
+
+  if (!document) {
+    return null;
+  }
 
   function setCellShape(cellId: string, shape: Shape) {
     setCells((currentCells) => {
@@ -115,7 +95,7 @@ function DocumentProvider({ children }: React.PropsWithChildren): JSX.Element {
   return (
     <Document.Provider
       value={{
-        title: title,
+        title: title || '',
         setTitle: setTitle,
         showGrid: showGrid,
         setShowGrid: setShowGrid,

@@ -1,15 +1,12 @@
 import { createContext } from 'react';
 import Cell from '../lib/Cell';
+import { DocumentDto } from '../lib/db';
 import Shape from '../lib/Shape';
 
-export interface DocumentProps {
-  title: string;
+export interface DocumentProps extends DocumentDto {
   setTitle: (value: string) => void;
   showGrid: boolean;
   setShowGrid: (value: boolean) => void;
-  gridRows: number;
-  gridColumns: number;
-  cells: Cell[];
   setCells: (value: Cell[]) => void;
   selectedCellId?: string;
   setSelectedCellId: (id: string) => void;
