@@ -73,11 +73,14 @@ const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
   return (
     <Stage
       ref={ref}
-      id='background'
       width={gridColumns * CELL_WIDTH}
       height={gridRows * CELL_WIDTH}
       onMouseEnter={makeMouseCursorChange('pointer')}
       onMouseLeave={makeMouseCursorChange('default')}
+      style={{
+        background: 'white',
+        border: '1px solid',
+      }}
     >
       <Layer>
         {gridCells.map((cell) => {

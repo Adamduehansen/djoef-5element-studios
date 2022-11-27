@@ -5,13 +5,6 @@ import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
 import DocumentProvider from '../lib/DocumentProvider';
 
-interface GenerateGridOptions {
-  rows: number;
-  columns: number;
-  centerX: number;
-  centerY: number;
-}
-
 function Editor(): JSX.Element {
   const gridRef = useRef<Konva.Stage>(null);
 
