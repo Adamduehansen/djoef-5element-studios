@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { useEffect, useRef } from 'react';
+import { createRef, useRef } from 'react';
 import EditorHeader from '../components/EditorHeader';
 import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
@@ -7,7 +7,6 @@ import DocumentProvider from '../lib/DocumentProvider';
 
 function Editor(): JSX.Element {
   const gridRef = useRef<Konva.Stage>(null);
-  console.log(gridRef);
 
   return (
     <DocumentProvider>

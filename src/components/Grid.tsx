@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
@@ -43,7 +43,7 @@ function makeGridCells(
     .sort((cell) => (cell.selected ? 1 : -1));
 }
 
-const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
+export default React.forwardRef<Konva.Stage>((_, ref) => {
   const {
     showGrid,
     gridColumns,
@@ -137,5 +137,3 @@ const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
     </div>
   );
 });
-
-export default Grid;

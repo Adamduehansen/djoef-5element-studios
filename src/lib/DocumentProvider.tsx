@@ -5,9 +5,7 @@ import Cell from './Cell';
 import Shape from './Shape';
 import { getDocument, DocumentDto, updateTitleOfDocument } from './db';
 
-function DocumentProvider({
-  children,
-}: React.PropsWithChildren): JSX.Element | null {
+function DocumentProvider({ children }: React.PropsWithChildren): JSX.Element {
   const [title, setTitle] = useState<string>();
   const [showGrid, setShowGrid] = useState(true);
   const [cells, setCells] = useState<Cell[]>([]);
@@ -37,10 +35,6 @@ function DocumentProvider({
     }
     updateTitleOfDocument(id!, title);
   }, [title]);
-
-  if (!document) {
-    return null;
-  }
 
   function setCellShape(cellId: string, shape: Shape) {
     setCells((currentCells) => {
@@ -96,8 +90,8 @@ function DocumentProvider({
         setShowGrid: setShowGrid,
         cells: cells,
         setCells: setCells,
-        gridColumns: document.gridColumns,
-        gridRows: document.gridRows,
+        gridColumns: document?.gridColumns || 0,
+        gridRows: document?.gridRows || 0,
         selectedCellId: selectedCellId,
         setSelectedCellId: setSelectedCellId,
         setCellShape: setCellShape,
