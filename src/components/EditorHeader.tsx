@@ -1,21 +1,10 @@
-import { Stage } from 'konva/lib/Stage';
 import { useState } from 'react';
 import { useDocument } from '../lib/DocumentProvider';
-
-function downloadURI(uri: string, name: string) {
-  var link = document.createElement('a');
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 interface Props {
-  stage: Stage;
+  onDownload: (title: string) => void;
 }
 
-function EditorHeader({ stage }: Props): JSX.Element {
+function EditorHeader({ onDownload }: Props): JSX.Element {
   const { title, setTitle, showGrid, setShowGrid } = useDocument();
 
   const [documentTitle, setDocumentTitle] = useState(title);
@@ -35,9 +24,10 @@ function EditorHeader({ stage }: Props): JSX.Element {
     setTitle(documentTitle);
   }
 
-  function onDownload() {
-    const uri = stage.toDataURL();
-    downloadURI(uri, title);
+  function makeDownloadHandler() {
+    return function () {
+      onDownload(title);
+    };
   }
 
   return (
@@ -69,7 +59,7 @@ function EditorHeader({ stage }: Props): JSX.Element {
             Vis gitter
           </label>
         </div>
-        <button onClick={onDownload}>Download</button>
+        <button onClick={makeDownloadHandler()}>Download</button>
       </div>
     </header>
   );
