@@ -43,7 +43,7 @@ function makeGridCells(
     .sort((cell) => (cell.selected ? 1 : -1));
 }
 
-export default React.forwardRef<Konva.Stage>((_, ref) => {
+const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
   const {
     showGrid,
     gridColumns,
@@ -137,3 +137,7 @@ export default React.forwardRef<Konva.Stage>((_, ref) => {
     </div>
   );
 });
+
+Grid.displayName = 'Grid';
+
+export default Grid;

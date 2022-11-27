@@ -5,7 +5,9 @@ import Cell from './Cell';
 import Shape from './Shape';
 import { getDocument, DocumentDto, updateTitleOfDocument } from './db';
 
-function DocumentProvider({ children }: React.PropsWithChildren): JSX.Element {
+function DocumentProvider({
+  children,
+}: React.PropsWithChildren): JSX.Element | null {
   const [title, setTitle] = useState<string>();
   const [showGrid, setShowGrid] = useState(true);
   const [cells, setCells] = useState<Cell[]>([]);
@@ -35,6 +37,10 @@ function DocumentProvider({ children }: React.PropsWithChildren): JSX.Element {
     }
     updateTitleOfDocument(id!, title);
   }, [title]);
+
+  if (!document) {
+    return null;
+  }
 
   function setCellShape(cellId: string, shape: Shape) {
     setCells((currentCells) => {
