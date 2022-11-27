@@ -17,32 +17,30 @@ function makeGridCells(
   cells: Cell[],
   col: number,
   selectedCellId?: string
-): () => GridCell[] {
-  return function () {
-    let colIndex = 0;
-    let rowIndex = 0;
+): GridCell[] {
+  let colIndex = 0;
+  let rowIndex = 0;
 
-    return cells
-      .map((cell): GridCell => {
-        const x = colIndex * CELL_WIDTH;
-        const y = rowIndex * CELL_WIDTH;
+  return cells
+    .map((cell): GridCell => {
+      const x = colIndex * CELL_WIDTH;
+      const y = rowIndex * CELL_WIDTH;
 
-        colIndex += 1;
+      colIndex += 1;
 
-        if (colIndex >= col) {
-          colIndex = 0;
-          rowIndex += 1;
-        }
+      if (colIndex >= col) {
+        colIndex = 0;
+        rowIndex += 1;
+      }
 
-        return {
-          ...cell,
-          x: x,
-          y: y,
-          selected: selectedCellId === cell.id,
-        };
-      })
-      .sort((cell) => (cell.selected ? 1 : -1));
-  };
+      return {
+        ...cell,
+        x: x,
+        y: y,
+        selected: selectedCellId === cell.id,
+      };
+    })
+    .sort((cell) => (cell.selected ? 1 : -1));
 }
 
 const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
@@ -60,7 +58,7 @@ const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
     function handleOutsideClick(event: MouseEvent) {
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        (event.target as Node).contains(containerRef.current)
       ) {
         setSelectedCellId(undefined);
       }
@@ -75,7 +73,7 @@ const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
     };
   }, []);
 
-  const gridCells = makeGridCells(cells, gridColumns, selectedCellId)();
+  const gridCells = makeGridCells(cells, gridColumns, selectedCellId);
 
   function makeCellSelectedHandler(id: string) {
     return function () {
