@@ -9,7 +9,7 @@ export interface DocumentProps extends DocumentDto {
   setShowGrid: (value: boolean) => void;
   setCells: (value: Cell[]) => void;
   selectedCellId?: string;
-  setSelectedCellId: (id: string) => void;
+  setSelectedCellId: (id?: string) => void;
   setCellShape: (cellId: string, shape: Shape) => void;
   setCellColor: (cellId: string, color: string) => void;
   setCellBackground: (cellId: string, color: string) => void;

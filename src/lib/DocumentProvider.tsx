@@ -3,12 +3,7 @@ import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
 import Cell from './Cell';
 import Shape from './Shape';
-import {
-  getDocument,
-  addNewDocument,
-  DocumentDto,
-  updateTitleOfDocument,
-} from './db';
+import { getDocument, DocumentDto, updateTitleOfDocument } from './db';
 
 function DocumentProvider({
   children,
