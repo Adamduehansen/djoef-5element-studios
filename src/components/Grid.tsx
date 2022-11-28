@@ -43,7 +43,7 @@ function makeGridCells(
     .sort((cell) => (cell.selected ? 1 : -1));
 }
 
-const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
+function Grid() {
   const {
     showGrid,
     gridColumns,
@@ -95,7 +95,6 @@ const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
   return (
     <div ref={containerRef}>
       <Stage
-        ref={ref}
         width={gridColumns * CELL_WIDTH}
         height={gridRows * CELL_WIDTH}
         onMouseEnter={makeMouseCursorChange('pointer')}
@@ -136,7 +135,7 @@ const Grid = React.forwardRef<Konva.Stage>((_, ref) => {
       </Stage>
     </div>
   );
-});
+}
 
 Grid.displayName = 'Grid';
 

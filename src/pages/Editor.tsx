@@ -1,29 +1,19 @@
-import Konva from 'konva';
-import { useRef } from 'react';
+import { useState } from 'react';
+import DownloadDialog from '../components/DownloadDialog';
 import EditorHeader from '../components/EditorHeader';
 import Grid from '../components/Grid';
 import SelectedCell from '../components/SelectedCell';
 import DocumentProvider from '../lib/DocumentProvider';
 
-function downloadURI(uri: string, name: string) {
-  var link = document.createElement('a');
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 function Editor(): JSX.Element {
-  const gridRef = useRef<Konva.Stage>(null);
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   return (
     <DocumentProvider>
       <div className='h-screen w-screen flex flex-col relative'>
         <EditorHeader
-          onDownload={(title) => {
-            const uri = gridRef.current!.toDataURL();
-            downloadURI(uri, title);
+          onDownload={() => {
+            setShowDownloadDialog(true);
           }}
         />
         <div className='h-screen flex'>
@@ -31,10 +21,16 @@ function Editor(): JSX.Element {
             <SelectedCell />
           </div>
           <div className='w-full flex justify-center items-center'>
-            <Grid ref={gridRef} />
+            <Grid />
           </div>
         </div>
       </div>
+      <DownloadDialog
+        open={showDownloadDialog}
+        onClose={() => {
+          setShowDownloadDialog(false);
+        }}
+      />
     </DocumentProvider>
   );
 }
