@@ -3,7 +3,13 @@ import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
 import Cell from './Cell';
 import Shape from './Shape';
-import { getDocument, DocumentDto, updateTitleOfDocument } from './db';
+import {
+  getDocument,
+  DocumentDto,
+  updateTitleOfDocument,
+  updateCellsForDocument,
+  addNewDocument,
+} from './db';
 
 function DocumentProvider({
   children,
@@ -21,7 +27,12 @@ function DocumentProvider({
       const documentDto = await getDocument(id!);
 
       if (!documentDto) {
-        throw new Error(`Document not found for id: ${id}`);
+        // throw new Error(`Document not found for id: ${id}`);
+        addNewDocument(id!, {
+          title: id!,
+          gridRows: 3,
+          gridColumns: 3,
+        });
       }
 
       setDocument(documentDto);
@@ -37,6 +48,13 @@ function DocumentProvider({
     }
     updateTitleOfDocument(id!, title);
   }, [title]);
+
+  useEffect(() => {
+    if (cells.length === 0) {
+      return;
+    }
+    updateCellsForDocument(id!, cells);
+  }, [cells]);
 
   if (!document) {
     return null;

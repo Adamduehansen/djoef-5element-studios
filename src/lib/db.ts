@@ -30,11 +30,29 @@ export async function getDocument(
   return await db.get('documents', id);
 }
 
-export async function addNewDocument(id: string, documentDto: DocumentDto) {
+type NewDocumentOptions = Pick<
+  DocumentDto,
+  'title' | 'gridRows' | 'gridColumns'
+>;
+export async function addNewDocument(
+  id: string,
+  newDocument: NewDocumentOptions
+) {
   const db = await getDB();
   const transaction = db.transaction('documents', 'readwrite');
   const store = transaction.objectStore('documents');
-  store.add(documentDto, id);
+  store.add(
+    {
+      ...newDocument,
+      cells: Array.from(Array(9)).map((_, index): Cell => {
+        return {
+          id: index.toString(),
+          rotation: 0,
+        };
+      }),
+    },
+    id
+  );
   await transaction.done;
 }
 
@@ -48,6 +66,24 @@ export async function updateTitleOfDocument(id: string, title: string) {
       {
         ...document,
         title: title,
+      },
+      id
+    );
+  }
+
+  await transaction.done;
+}
+
+export async function updateCellsForDocument(id: string, cells: Cell[]) {
+  const db = await getDB();
+  const transaction = db.transaction('documents', 'readwrite');
+  const store = transaction.objectStore('documents');
+  const document = await store.get(id);
+  if (document) {
+    await store.put(
+      {
+        ...document,
+        cells: cells,
       },
       id
     );
