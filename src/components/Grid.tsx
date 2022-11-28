@@ -15,28 +15,16 @@ export interface GridCell extends Cell {
 
 function makeGridCells(
   cells: Cell[],
-  col: number,
+  cols: number,
+  rows: number,
   selectedCellId?: string
 ): GridCell[] {
-  let colIndex = 0;
-  let rowIndex = 0;
-
   return cells
-    .map((cell): GridCell => {
-      const x = colIndex * CELL_WIDTH;
-      const y = rowIndex * CELL_WIDTH;
-
-      colIndex += 1;
-
-      if (colIndex >= col) {
-        colIndex = 0;
-        rowIndex += 1;
-      }
-
+    .map((cell, index): GridCell => {
       return {
         ...cell,
-        x: x,
-        y: y,
+        x: (index % cols) * CELL_WIDTH,
+        y: Math.floor(index / rows) * CELL_WIDTH,
         selected: selectedCellId === cell.id,
       };
     })
@@ -73,7 +61,7 @@ function Grid() {
     };
   }, []);
 
-  const gridCells = makeGridCells(cells, gridColumns, selectedCellId);
+  const gridCells = makeGridCells(cells, gridColumns, gridRows, selectedCellId);
 
   function makeCellSelectedHandler(id: string) {
     return function () {
@@ -136,7 +124,5 @@ function Grid() {
     </div>
   );
 }
-
-Grid.displayName = 'Grid';
 
 export default Grid;
