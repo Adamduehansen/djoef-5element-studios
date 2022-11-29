@@ -64,6 +64,22 @@ function SelectedCell(): JSX.Element | null {
     <>
       <div>
         <Listbox
+          value={selectedCell.background || ''}
+          onChange={handleBackgroundChange}
+        >
+          <Listbox.Button aria-label='background-button'>
+            Baggrund: {selectedCell.background || 'Ikke valgt'}
+          </Listbox.Button>
+          <Listbox.Options>
+            <ListBoxOption text='Ingen' value={undefined} />
+            {['red', 'green', 'blue'].map((color) => {
+              return <ListBoxOption key={color} value={color} text={color} />;
+            })}
+          </Listbox.Options>
+        </Listbox>
+      </div>
+      <div>
+        <Listbox
           value={selectedCell.shape || ''}
           onChange={handleOnShapeChange}
         >
@@ -95,22 +111,6 @@ function SelectedCell(): JSX.Element | null {
         >
           <Listbox.Button aria-label='color-button'>
             Farve: {selectedCell.color || 'Ikke valgt'}
-          </Listbox.Button>
-          <Listbox.Options>
-            <ListBoxOption text='Ingen' value={undefined} />
-            {['red', 'green', 'blue'].map((color) => {
-              return <ListBoxOption key={color} value={color} text={color} />;
-            })}
-          </Listbox.Options>
-        </Listbox>
-      </div>
-      <div>
-        <Listbox
-          value={selectedCell.background || ''}
-          onChange={handleBackgroundChange}
-        >
-          <Listbox.Button aria-label='background-button'>
-            Baggrund: {selectedCell.background || 'Ikke valgt'}
           </Listbox.Button>
           <Listbox.Options>
             <ListBoxOption text='Ingen' value={undefined} />
