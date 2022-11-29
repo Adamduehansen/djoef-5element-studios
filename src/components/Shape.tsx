@@ -22,6 +22,8 @@ function Triangle({ cell, width }: ShapeProps): JSX.Element {
       x={cell.x + width / 2}
       y={cell.y + width / 2}
       rotation={cell.rotation}
+      stroke='1px solid'
+      strokeEnabled={cell.color === undefined}
       offset={{
         x: width / 2,
         y: width / 2,
@@ -45,6 +47,8 @@ function Arc({ cell, width }: ShapeProps): JSX.Element {
       x={cell.x + width / 2}
       y={cell.y + width / 2}
       rotation={cell.rotation}
+      stroke='1px solid'
+      strokeEnabled={cell.color === undefined}
       offset={{
         x: width / 2,
         y: width / 2,
@@ -62,6 +66,8 @@ function Circle({ cell, width }: ShapeProps): JSX.Element {
       x={cell.x + width / 2}
       y={cell.y + width / 2}
       fill={cell.color}
+      stroke='1px solid'
+      strokeEnabled={cell.color === undefined}
     />
   );
 }
