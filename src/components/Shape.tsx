@@ -12,14 +12,19 @@ function Triangle({ cell, width }: ShapeProps): JSX.Element {
   return (
     <KonvaShape
       sceneFunc={(context, shape) => {
-        const { x } = cell;
-        const { y } = cell;
         context.beginPath();
-        context.moveTo(x, y);
-        context.lineTo(x + width, y + width);
-        context.lineTo(x, y + width);
+        context.moveTo(0, 0);
+        context.lineTo(width, width);
+        context.lineTo(0, width);
         context.closePath();
         context.fillStrokeShape(shape);
+      }}
+      x={cell.x + width / 2}
+      y={cell.y + width / 2}
+      rotation={cell.rotation}
+      offset={{
+        x: width / 2,
+        y: width / 2,
       }}
       fill={cell.color}
     />
@@ -30,14 +35,19 @@ function Arc({ cell, width }: ShapeProps): JSX.Element {
   return (
     <KonvaShape
       sceneFunc={(context, shape) => {
-        const { x } = cell;
-        const { y } = cell;
         context.beginPath();
-        context.moveTo(x, y);
-        context.quadraticCurveTo(x + width, y, x + width, y + width);
-        context.lineTo(x, y + width);
+        context.moveTo(0, 0);
+        context.quadraticCurveTo(width, 0, width, width);
+        context.lineTo(0, width);
         context.closePath();
         context.fillStrokeShape(shape);
+      }}
+      x={cell.x + width / 2}
+      y={cell.y + width / 2}
+      rotation={cell.rotation}
+      offset={{
+        x: width / 2,
+        y: width / 2,
       }}
       fill={cell.color}
     />

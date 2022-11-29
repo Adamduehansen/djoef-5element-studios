@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
-import Cell, { rotation } from './Cell';
+import Cell from './Cell';
 import Shape from './Shape';
 import {
   getDocument,
@@ -103,7 +103,7 @@ function DocumentProvider({
     updateCell(cellId, (cell) => {
       return {
         ...cell,
-        rotation: rotation[cell.rotation - 1],
+        rotation: cell.rotation - 90,
       };
     });
   }
@@ -112,7 +112,7 @@ function DocumentProvider({
     updateCell(cellId, (cell) => {
       return {
         ...cell,
-        rotation: rotation[cell.rotation + 1],
+        rotation: cell.rotation + 90,
       };
     });
   }
