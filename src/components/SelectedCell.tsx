@@ -67,7 +67,7 @@ function SelectedCell(): JSX.Element | null {
           value={selectedCell.shape || ''}
           onChange={handleOnShapeChange}
         >
-          <Listbox.Button>
+          <Listbox.Button aria-label='shape-button'>
             Figur:
             {selectedCell.shape
               ? shapeDictionary.get(selectedCell.shape)
@@ -93,7 +93,7 @@ function SelectedCell(): JSX.Element | null {
           onChange={handleOnColorChange}
           disabled={selectedCell.shape ? false : true}
         >
-          <Listbox.Button>
+          <Listbox.Button aria-label='color-button'>
             Farve: {selectedCell.color || 'Ikke valgt'}
           </Listbox.Button>
           <Listbox.Options>
@@ -109,7 +109,7 @@ function SelectedCell(): JSX.Element | null {
           value={selectedCell.background || ''}
           onChange={handleBackgroundChange}
         >
-          <Listbox.Button>
+          <Listbox.Button aria-label='background-button'>
             Baggrund: {selectedCell.background || 'Ikke valgt'}
           </Listbox.Button>
           <Listbox.Options>
