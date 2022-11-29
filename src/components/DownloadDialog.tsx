@@ -22,6 +22,10 @@ function downloadURI(uri: string, name: string) {
 
 const CANVAS_SIZE = 300;
 
+function Backdrop(): JSX.Element {
+  return <div className='fixed inset-0 bg-black/30' aria-hidden='true' />;
+}
+
 function DownloadDialog({ open, onClose }: Props): JSX.Element {
   const stageRef = useRef<Konva.Stage>(null);
   const { title, cells, gridColumns, gridRows } = useDocument();
@@ -42,7 +46,7 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
 
   return (
     <Dialog open={open} onClose={onClose} className='relative z-50'>
-      <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
+      <Backdrop />
       <div className='fixed inset-0 flex items-center justify-center p-4'>
         <Dialog.Panel className='rounded bg-white p-4'>
           <Dialog.Title>Download "{title}"</Dialog.Title>
