@@ -30,6 +30,8 @@ function SelectedCell(): JSX.Element | null {
     setCellShape,
     setCellColor,
     setCellBackground,
+    rotateCellLeft,
+    rotateCellRight,
   } = useDocument();
 
   if (!selectedCellId) {
@@ -46,6 +48,14 @@ function SelectedCell(): JSX.Element | null {
 
   function handleBackgroundChange(color: string) {
     setCellBackground(selectedCellId!, color);
+  }
+
+  function handleRotateLeft() {
+    rotateCellLeft(selectedCellId!);
+  }
+
+  function handleRotateRight() {
+    rotateCellRight(selectedCellId!);
   }
 
   const selectedCell = cells.find((cells) => cells.id === selectedCellId)!;
@@ -109,6 +119,15 @@ function SelectedCell(): JSX.Element | null {
             })}
           </Listbox.Options>
         </Listbox>
+      </div>
+      <div>
+        <span className='block'>Rotate</span>
+        <button aria-label='rotate-left' onClick={handleRotateLeft}>
+          Left
+        </button>
+        <button aria-label='rotate-right' onClick={handleRotateRight}>
+          Right
+        </button>
       </div>
     </>
   );

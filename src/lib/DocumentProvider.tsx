@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
-import Cell from './Cell';
+import Cell, { rotation } from './Cell';
 import Shape from './Shape';
 import {
   getDocument,
@@ -60,48 +60,60 @@ function DocumentProvider({
     return null;
   }
 
-  function setCellShape(cellId: string, shape: Shape) {
+  function updateCell(cellId: string, updateCell: (cell: Cell) => Cell) {
     setCells((currentCells) => {
       return currentCells.map((cell) => {
         if (cell.id !== cellId) {
           return cell;
         }
 
-        return {
-          ...cell,
-          shape: shape,
-        };
+        return updateCell(cell);
       });
+    });
+  }
+
+  function setCellShape(cellId: string, shape: Shape) {
+    updateCell(cellId, (cell) => {
+      return {
+        ...cell,
+        shape: shape,
+      };
     });
   }
 
   function setCellColor(cellId: string, color: string) {
-    setCells((currentCells) => {
-      return currentCells.map((cell) => {
-        if (cell.id !== cellId) {
-          return cell;
-        }
-
-        return {
-          ...cell,
-          color: color,
-        };
-      });
+    updateCell(cellId, (cell) => {
+      return {
+        ...cell,
+        color: color,
+      };
     });
   }
 
   function setCellBackground(cellId: string, color: string) {
-    setCells((currentCells) => {
-      return currentCells.map((cell) => {
-        if (cell.id !== cellId) {
-          return cell;
-        }
+    updateCell(cellId, (cell) => {
+      return {
+        ...cell,
+        background: color,
+      };
+    });
+  }
 
-        return {
-          ...cell,
-          background: color,
-        };
-      });
+  function rotateCellLeft(cellId: string) {
+    updateCell(cellId, (cell) => {
+      return {
+        ...cell,
+        rotation: rotation[cell.rotation - 1],
+      };
+    });
+  }
+
+  function rotateCellRight(cellId: string) {
+    updateCell(cellId, (cell) => {
+      return {
+        ...cell,
+        rotation: rotation[cell.rotation + 1],
+      };
     });
   }
 
@@ -121,6 +133,8 @@ function DocumentProvider({
         setCellShape: setCellShape,
         setCellColor: setCellColor,
         setCellBackground: setCellBackground,
+        rotateCellLeft: rotateCellLeft,
+        rotateCellRight: rotateCellRight,
       }}
     >
       {children}

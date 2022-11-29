@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';

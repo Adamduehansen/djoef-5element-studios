@@ -13,6 +13,8 @@ export interface DocumentProps extends DocumentDto {
   setCellShape: (cellId: string, shape: Shape) => void;
   setCellColor: (cellId: string, color: string) => void;
   setCellBackground: (cellId: string, color: string) => void;
+  rotateCellLeft: (cellId: string) => void;
+  rotateCellRight: (cellId: string) => void;
 }
 
 const Document = createContext<DocumentProps>({
@@ -28,6 +30,8 @@ const Document = createContext<DocumentProps>({
   setCellShape: () => {},
   setCellColor: () => {},
   setCellBackground: () => {},
+  rotateCellLeft: () => {},
+  rotateCellRight: () => {},
 });
 
 export default Document;
