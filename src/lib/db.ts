@@ -41,10 +41,11 @@ export async function addNewDocument(
   const db = await getDB();
   const transaction = db.transaction('documents', 'readwrite');
   const store = transaction.objectStore('documents');
+  const { gridColumns, gridRows } = newDocument;
   store.add(
     {
       ...newDocument,
-      cells: Array.from(Array(9)).map((_, index): Cell => {
+      cells: Array.from(Array(gridColumns * gridRows)).map((_, index): Cell => {
         return {
           id: index.toString(),
           rotation: 0,

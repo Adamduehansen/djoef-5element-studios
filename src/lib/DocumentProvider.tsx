@@ -30,8 +30,8 @@ function DocumentProvider({
         // throw new Error(`Document not found for id: ${id}`);
         addNewDocument(id!, {
           title: id!,
-          gridRows: 3,
-          gridColumns: 3,
+          gridRows: 4,
+          gridColumns: 4,
         });
       }
 
