@@ -62,12 +62,6 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
               {gridCells.map((cell) => {
                 return (
                   <Fragment key={cell.id}>
-                    {cell.shape && (
-                      <ShapeFactory
-                        cell={cell}
-                        width={CANVAS_SIZE / gridColumns}
-                      />
-                    )}
                     {cell.background && (
                       <Rect
                         width={CANVAS_SIZE / gridColumns}
@@ -75,6 +69,12 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
                         x={cell.x}
                         y={cell.y}
                         fill={cell.background}
+                      />
+                    )}
+                    {cell.shape && (
+                      <ShapeFactory
+                        cell={cell}
+                        width={CANVAS_SIZE / gridColumns}
                       />
                     )}
                   </Fragment>
