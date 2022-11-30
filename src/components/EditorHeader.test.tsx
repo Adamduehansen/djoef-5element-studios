@@ -1,10 +1,10 @@
-import { describe, test, expect, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { describe, test, expect } from 'vitest';
 import Document from '../contexts/Document';
 import EditorHeader from './EditorHeader';
 
 describe('EditorHeader', () => {
-  test('should render title of document as input field', async (): Promise<void> => {
+  test('should render title of document', async (): Promise<void> => {
     // Arrange
     render(
       <Document.Provider
@@ -13,52 +13,16 @@ describe('EditorHeader', () => {
           title: 'any-title',
         }}
       >
-        {/* @ts-ignore */}
-        <EditorHeader stage={null} />
+        <EditorHeader />
       </Document.Provider>
     );
 
     // Act
-    const titleInput = await screen.findByRole('textbox', {
-      name: 'Titel',
+    const header = await screen.findByRole('heading', {
+      name: 'any-title',
     });
 
     // Assert
-    expect(titleInput).toBeInTheDocument();
-  });
-
-  test('should render "unsaved changes" elements to title input', async () => {
-    // Arrange
-    render(
-      <Document.Provider
-        // @ts-ignore
-        value={{
-          title: 'any-title',
-        }}
-      >
-        {/* @ts-ignore */}
-        <EditorHeader stage={null} />
-      </Document.Provider>
-    );
-
-    // Act
-    const titleInput = await screen.findByRole('textbox', {
-      name: 'Titel',
-    });
-
-    fireEvent.change(titleInput, {
-      target: {
-        value: 'changed',
-      },
-    });
-
-    const asterix = await screen.findByText('*');
-    const updateButton = await screen.findByRole('button', {
-      name: 'Opdater',
-    });
-
-    // Assert
-    expect(asterix).toBeInTheDocument();
-    expect(updateButton).toBeInTheDocument();
+    expect(header).toBeInTheDocument();
   });
 });
