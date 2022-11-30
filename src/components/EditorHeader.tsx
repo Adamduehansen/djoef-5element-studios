@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDocument } from '../lib/DocumentProvider';
+import Input from './Input';
 interface Props {
   onDownload: (title: string) => void;
 }
@@ -33,18 +34,13 @@ function EditorHeader({ onDownload }: Props): JSX.Element {
   return (
     <header className='p-4 flex justify-between border-b'>
       <form onSubmit={onTitleChangeSubmit} className='flex'>
-        <div>
-          <label htmlFor='document-title' className='pr-2'>
-            Titel
-          </label>
-          {title !== documentTitle && <span>*</span>}
-          <input
-            type='text'
-            id='document-title'
-            value={documentTitle}
-            onChange={onDocumentTitleChange}
-          />
-        </div>
+        <Input
+          type='text'
+          text='Titel'
+          value={documentTitle}
+          onChange={onDocumentTitleChange}
+          changed={title !== documentTitle}
+        />
         {title !== documentTitle && <button>Opdater</button>}
       </form>
 
@@ -59,6 +55,7 @@ function EditorHeader({ onDownload }: Props): JSX.Element {
             Vis gitter
           </label>
         </div>
+        <Input type='number' text='Celle størrelse' />
         <button onClick={makeDownloadHandler()}>Download</button>
       </div>
     </header>

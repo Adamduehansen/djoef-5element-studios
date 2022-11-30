@@ -5,7 +5,7 @@ import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
 import ShapeFactory from './Shape';
 
-const CELL_WIDTH = 100;
+const CELL_WIDTH = 200;
 
 export interface GridCell extends Cell {
   x: number;
