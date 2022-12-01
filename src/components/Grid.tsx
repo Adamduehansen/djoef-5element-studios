@@ -5,38 +5,46 @@ import type Cell from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
 import ShapeFactory from './Shape';
 
-const CELL_WIDTH = 200;
-
 export interface GridCell extends Cell {
   x: number;
   y: number;
   selected: boolean;
 }
 
-function makeGridCells(
-  cells: Cell[],
-  cols: number,
-  rows: number,
-  selectedCellId?: string
-): GridCell[] {
+interface MakeGridOptions {
+  cells: Cell[];
+  cols: number;
+  rows: number;
+  selectedCellId?: string;
+  cellSize: number;
+}
+
+function makeGridCells({
+  cells,
+  cols,
+  rows,
+  selectedCellId,
+  cellSize,
+}: MakeGridOptions): GridCell[] {
   return cells
     .map((cell, index): GridCell => {
       return {
         ...cell,
-        x: (index % cols) * CELL_WIDTH,
-        y: Math.floor(index / rows) * CELL_WIDTH,
+        x: (index % cols) * cellSize,
+        y: Math.floor(index / rows) * cellSize,
         selected: selectedCellId === cell.id,
       };
     })
     .sort((cell) => (cell.selected ? 1 : -1));
 }
 
-function Grid() {
+function Grid(): JSX.Element {
   const {
     showGrid,
     gridColumns,
     gridRows,
     cells,
+    cellSize,
     setSelectedCellId,
     selectedCellId,
   } = useDocument();
@@ -61,7 +69,13 @@ function Grid() {
     };
   }, []);
 
-  const gridCells = makeGridCells(cells, gridColumns, gridRows, selectedCellId);
+  const gridCells = makeGridCells({
+    cells: cells,
+    cols: gridColumns,
+    rows: gridRows,
+    cellSize: cellSize,
+    selectedCellId: selectedCellId,
+  });
 
   function makeCellSelectedHandler(id: string) {
     return function () {
@@ -83,8 +97,8 @@ function Grid() {
   return (
     <div ref={containerRef}>
       <Stage
-        width={gridColumns * CELL_WIDTH}
-        height={gridRows * CELL_WIDTH}
+        width={gridColumns * cellSize}
+        height={gridRows * cellSize}
         onMouseEnter={makeMouseCursorChange('pointer')}
         onMouseLeave={makeMouseCursorChange('default')}
         style={{
@@ -98,18 +112,18 @@ function Grid() {
               <Fragment key={cell.id}>
                 {cell.background && (
                   <Rect
-                    width={CELL_WIDTH}
-                    height={CELL_WIDTH}
+                    width={cellSize}
+                    height={cellSize}
                     x={cell.x}
                     y={cell.y}
                     fill={cell.background}
                   />
                 )}
-                {cell.shape && <ShapeFactory cell={cell} width={CELL_WIDTH} />}
+                {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
                 <Rect
                   key={cell.id}
-                  width={CELL_WIDTH}
-                  height={CELL_WIDTH}
+                  width={cellSize}
+                  height={cellSize}
                   stroke={cell.selected ? 'grey' : 'lightgrey'}
                   strokeEnabled={showGrid}
                   x={cell.x}

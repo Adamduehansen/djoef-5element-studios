@@ -17,6 +17,7 @@ function DocumentProvider({
   const [title, setTitle] = useState<string>();
   const [showGrid, setShowGrid] = useState(true);
   const [cells, setCells] = useState<Cell[]>([]);
+  const [cellSize, setCellSize] = useState(0);
   const [selectedCellId, setSelectedCellId] = useState<string>();
   const [document, setDocument] = useState<DocumentDto>();
 
@@ -38,6 +39,7 @@ function DocumentProvider({
       setDocument(documentDto);
       setTitle(documentDto!.title);
       setCells(documentDto!.cells);
+      setCellSize(documentDto!.cellSize);
     }
     initDocument();
   }, []);
@@ -125,6 +127,8 @@ function DocumentProvider({
         showGrid: showGrid,
         setShowGrid: setShowGrid,
         cells: cells,
+        cellSize: cellSize,
+        setCellSize: setCellSize,
         setCells: setCells,
         gridColumns: document?.gridColumns || 0,
         gridRows: document?.gridRows || 0,

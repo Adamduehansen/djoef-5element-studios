@@ -1,12 +1,20 @@
 import { openDB, DBSchema } from 'idb';
 import Cell from './Cell';
 
+const DEFAULT_CELL_SIZE = 100;
+
 export interface DocumentDto {
   title: string;
   cells: Cell[];
   gridRows: number;
   gridColumns: number;
+  cellSize: number;
 }
+
+type NewDocumentOptions = Pick<
+  DocumentDto,
+  'title' | 'gridRows' | 'gridColumns'
+>;
 
 interface DB extends DBSchema {
   documents: {
@@ -30,10 +38,6 @@ export async function getDocument(
   return await db.get('documents', id);
 }
 
-type NewDocumentOptions = Pick<
-  DocumentDto,
-  'title' | 'gridRows' | 'gridColumns'
->;
 export async function addNewDocument(
   id: string,
   newDocument: NewDocumentOptions
@@ -45,6 +49,7 @@ export async function addNewDocument(
   store.add(
     {
       ...newDocument,
+      cellSize: DEFAULT_CELL_SIZE,
       cells: Array.from(Array(gridColumns * gridRows)).map((_, index): Cell => {
         return {
           id: index.toString(),

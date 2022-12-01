@@ -8,6 +8,7 @@ export interface DocumentProps extends DocumentDto {
   showGrid: boolean;
   setShowGrid: (value: boolean) => void;
   setCells: (value: Cell[]) => void;
+  setCellSize: (value: number) => void;
   selectedCellId?: string;
   setSelectedCellId: (id?: string) => void;
   setCellShape: (cellId: string, shape: Shape) => void;
@@ -26,6 +27,8 @@ const Document = createContext<DocumentProps>({
   gridColumns: 0,
   cells: [],
   setCells: () => {},
+  cellSize: 100,
+  setCellSize: () => {},
   setSelectedCellId: () => {},
   setCellShape: () => {},
   setCellColor: () => {},
