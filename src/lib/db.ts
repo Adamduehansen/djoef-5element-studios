@@ -80,6 +80,24 @@ export async function updateTitleOfDocument(id: string, title: string) {
   await transaction.done;
 }
 
+export async function updateCellSizeOfDocument(id: string, cellSize: number) {
+  const db = await getDB();
+  const transaction = db.transaction('documents', 'readwrite');
+  const store = transaction.objectStore('documents');
+  const document = await store.get(id);
+  if (document) {
+    await store.put(
+      {
+        ...document,
+        cellSize: cellSize,
+      },
+      id
+    );
+  }
+
+  await transaction.done;
+}
+
 export async function updateCellsForDocument(id: string, cells: Cell[]) {
   const db = await getDB();
   const transaction = db.transaction('documents', 'readwrite');

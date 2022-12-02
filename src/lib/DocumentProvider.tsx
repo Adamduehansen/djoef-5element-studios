@@ -9,6 +9,7 @@ import {
   updateTitleOfDocument,
   updateCellsForDocument,
   addNewDocument,
+  updateCellSizeOfDocument,
 } from './db';
 
 function DocumentProvider({
@@ -17,7 +18,7 @@ function DocumentProvider({
   const [title, setTitle] = useState<string>();
   const [showGrid, setShowGrid] = useState(true);
   const [cells, setCells] = useState<Cell[]>([]);
-  const [cellSize, setCellSize] = useState(0);
+  const [cellSize, setCellSize] = useState<number>();
   const [selectedCellId, setSelectedCellId] = useState<string>();
   const [document, setDocument] = useState<DocumentDto>();
 
@@ -57,6 +58,13 @@ function DocumentProvider({
     }
     updateCellsForDocument(id!, cells);
   }, [cells]);
+
+  useEffect(() => {
+    if (!cellSize) {
+      return;
+    }
+    updateCellSizeOfDocument(id!, cellSize);
+  }, [cellSize]);
 
   if (!document) {
     return null;
@@ -127,7 +135,7 @@ function DocumentProvider({
         showGrid: showGrid,
         setShowGrid: setShowGrid,
         cells: cells,
-        cellSize: cellSize,
+        cellSize: cellSize || 0,
         setCellSize: setCellSize,
         setCells: setCells,
         gridColumns: document?.gridColumns || 0,

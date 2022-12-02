@@ -17,7 +17,7 @@ function Editor(): JSX.Element {
           <div className='h-full w-[300px] border-r'>
             <SelectedCell />
           </div>
-          <div className='w-full flex justify-center items-center'>
+          <div className='w-full flex justify-center items-center overflow-hidden'>
             <Grid />
           </div>
           <div className='h-full w-[300px] border-l'>

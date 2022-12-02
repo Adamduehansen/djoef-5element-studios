@@ -7,9 +7,13 @@ interface Props {
 }
 
 function EditDocument({ onDownload }: Props): JSX.Element {
-  const { title, setTitle, showGrid, setShowGrid } = useDocument();
+  const { title, setTitle, showGrid, setShowGrid, cellSize, setCellSize } =
+    useDocument();
 
   const [documentTitle, setDocumentTitle] = useState(title);
+  const [documentCellSize, setDocumentCellSize] = useState<number | undefined>(
+    cellSize
+  );
 
   function makeOnGridChange() {
     return function () {
@@ -21,9 +25,24 @@ function EditDocument({ onDownload }: Props): JSX.Element {
     setDocumentTitle(event.target.value);
   }
 
-  function onTitleChangeSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function onDocumentCellSizeChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setDocumentCellSize(parseInt(event.target.value));
+  }
+
+  function onTitleChangeSubmit(event: React.FormEvent) {
     event.preventDefault();
     setTitle(documentTitle);
+  }
+
+  function onCellSizeChangeSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!documentCellSize) {
+      return;
+    }
+
+    setCellSize(documentCellSize);
   }
 
   function makeDownloadHandler() {
@@ -54,7 +73,18 @@ function EditDocument({ onDownload }: Props): JSX.Element {
           Vis gitter
         </label>
       </div>
-      <Input type='number' text='Celle størrelse' />
+      <form onSubmit={onCellSizeChangeSubmit}>
+        <div className='flex'>
+          <Input
+            type='number'
+            text='Celle størrelse (px)'
+            value={documentCellSize || ''}
+            onChange={onDocumentCellSizeChange}
+            changed={cellSize !== documentCellSize}
+          />
+        </div>
+        <button>Opdater Cellstørrelse</button>
+      </form>
       <button onClick={makeDownloadHandler()}>Download</button>
     </>
   );
