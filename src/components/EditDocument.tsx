@@ -76,9 +76,12 @@ function EditDocument({ onDownload }: Props): JSX.Element {
       <form onSubmit={onCellSizeChangeSubmit}>
         <div className='flex'>
           <Input
-            type='number'
+            type='range'
             text='Celle størrelse (px)'
             value={documentCellSize || ''}
+            min='100'
+            max='500'
+            step='50'
             onChange={onDocumentCellSizeChange}
             changed={cellSize !== documentCellSize}
           />
