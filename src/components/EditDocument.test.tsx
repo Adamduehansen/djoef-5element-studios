@@ -53,7 +53,7 @@ describe('EditorHeader', () => {
 
     const asterix = await screen.findByText('*');
     const updateButton = await screen.findByRole('button', {
-      name: /Opdater/,
+      name: 'Opdater Titel',
     });
 
     // Assert
