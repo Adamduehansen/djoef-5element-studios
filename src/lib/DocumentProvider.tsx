@@ -70,14 +70,14 @@ function DocumentProvider({
     return null;
   }
 
-  function updateCell(cellId: string, updateCell: (cell: Cell) => Cell) {
+  function updateCell(cellId: string, updateCellHandler: (cell: Cell) => Cell) {
     setCells((currentCells) => {
       return currentCells.map((cell) => {
         if (cell.id !== cellId) {
           return cell;
         }
 
-        return updateCell(cell);
+        return updateCellHandler(cell);
       });
     });
   }

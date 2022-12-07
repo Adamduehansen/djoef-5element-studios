@@ -1,9 +1,10 @@
 import { Dialog } from '@headlessui/react';
 import Konva from 'konva';
-import { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import { useDocument } from '../lib/DocumentProvider';
 import { GridCell } from './Grid';
+import Input from './Input';
 import ShapeFactory from './Shape';
 
 interface Props {
@@ -20,27 +21,35 @@ function downloadURI(uri: string, name: string) {
   document.body.removeChild(link);
 }
 
-const CANVAS_SIZE = 300;
+const DEFAULT_IMAGE_SIZE = 400;
 
 function Backdrop(): JSX.Element {
   return <div className='fixed inset-0 bg-black/30' aria-hidden='true' />;
 }
 
 function DownloadDialog({ open, onClose }: Props): JSX.Element {
+  const [imageSize, setImageSize] = useState(DEFAULT_IMAGE_SIZE);
   const stageRef = useRef<Konva.Stage>(null);
   const { title, cells, gridColumns, gridRows } = useDocument();
 
   const gridCells = cells.map((cell, index): GridCell => {
     return {
       ...cell,
-      x: (index % gridColumns) * (CANVAS_SIZE / gridColumns),
-      y: Math.floor(index / gridRows) * (CANVAS_SIZE / gridColumns),
+      x: (index % gridColumns) * (DEFAULT_IMAGE_SIZE / gridColumns),
+      y: Math.floor(index / gridRows) * (DEFAULT_IMAGE_SIZE / gridColumns),
       selected: false,
     };
   });
 
-  function download(): void {
-    const uri = stageRef.current!.toDataURL();
+  function onDownloadSizeChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setImageSize(parseInt(event.target.value));
+  }
+
+  function onDownloadFormSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const uri = stageRef.current!.toDataURL({
+      pixelRatio: imageSize / DEFAULT_IMAGE_SIZE,
+    });
     downloadURI(uri, title);
   }
 
@@ -52,8 +61,8 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
           <Dialog.Title>Download "{title}"</Dialog.Title>
           <Stage
             ref={stageRef}
-            width={CANVAS_SIZE}
-            height={CANVAS_SIZE}
+            width={DEFAULT_IMAGE_SIZE}
+            height={DEFAULT_IMAGE_SIZE}
             style={{
               border: '1px solid',
             }}
@@ -64,8 +73,8 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
                   <Fragment key={cell.id}>
                     {cell.background && (
                       <Rect
-                        width={CANVAS_SIZE / gridColumns}
-                        height={CANVAS_SIZE / gridRows}
+                        width={DEFAULT_IMAGE_SIZE / gridColumns}
+                        height={DEFAULT_IMAGE_SIZE / gridRows}
                         x={cell.x}
                         y={cell.y}
                         fill={cell.background}
@@ -74,7 +83,7 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
                     {cell.shape && (
                       <ShapeFactory
                         cell={cell}
-                        width={CANVAS_SIZE / gridColumns}
+                        width={DEFAULT_IMAGE_SIZE / gridColumns}
                       />
                     )}
                   </Fragment>
@@ -82,8 +91,16 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
               })}
             </Layer>
           </Stage>
-          <button onClick={download}>Download</button>
-          <button onClick={onClose}>Cancel</button>
+          <form onSubmit={onDownloadFormSubmit}>
+            <Input
+              type='number'
+              text='Størrelse'
+              value={imageSize}
+              onChange={onDownloadSizeChange}
+              autoFocus
+            />
+            <button>Download</button>
+          </form>
         </Dialog.Panel>
       </div>
     </Dialog>
