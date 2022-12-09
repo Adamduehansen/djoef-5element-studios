@@ -1,11 +1,17 @@
-import { Link } from 'react-router-dom';
+import DocumentList from '../components/DocumentList';
+import { getAllDocuments } from '../lib/db';
+import DocumentClientProvider from '../lib/DocumentClientProvider';
 
 function Home(): JSX.Element {
   return (
-    <div>
+    <DocumentClientProvider
+      client={{
+        getAllDocuments: getAllDocuments,
+      }}
+    >
       <h1>Home</h1>
-      <Link to='/editor'>Create new</Link>
-    </div>
+      <DocumentList />
+    </DocumentClientProvider>
   );
 }
 

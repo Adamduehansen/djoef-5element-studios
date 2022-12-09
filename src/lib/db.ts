@@ -4,6 +4,7 @@ import Cell from './Cell';
 const DEFAULT_CELL_SIZE = 100;
 
 export interface DocumentDto {
+  id: string;
   title: string;
   cells: Cell[];
   gridRows: number;
@@ -26,7 +27,9 @@ interface DB extends DBSchema {
 export async function getDB() {
   return await openDB<DB>('djoef-5element-editor', 1, {
     upgrade: function (db) {
-      db.createObjectStore('documents');
+      db.createObjectStore('documents', {
+        keyPath: 'id',
+      });
     },
   });
 }
@@ -49,6 +52,7 @@ export async function addNewDocument(
   store.add(
     {
       ...newDocument,
+      id: id,
       cellSize: DEFAULT_CELL_SIZE,
       cells: Array.from(Array(gridColumns * gridRows)).map((_, index): Cell => {
         return {
@@ -114,4 +118,11 @@ export async function updateCellsForDocument(id: string, cells: Cell[]) {
   }
 
   await transaction.done;
+}
+
+export async function getAllDocuments(): Promise<DocumentDto[]> {
+  const db = await getDB();
+  const transaction = db.transaction('documents', 'readwrite');
+  const store = transaction.objectStore('documents');
+  return await store.getAll();
 }
