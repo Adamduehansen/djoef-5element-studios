@@ -5,6 +5,7 @@ import { Layer, Rect, Stage } from 'react-konva';
 import { useDocument } from '../lib/DocumentProvider';
 import { GridCell } from './Grid';
 import Input from './Input';
+import Preview from './Preview';
 import ShapeFactory from './Shape';
 
 interface Props {
@@ -32,15 +33,6 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
   const stageRef = useRef<Konva.Stage>(null);
   const { title, cells, gridColumns, gridRows } = useDocument();
 
-  const gridCells = cells.map((cell, index): GridCell => {
-    return {
-      ...cell,
-      x: (index % gridColumns) * (DEFAULT_IMAGE_SIZE / gridColumns),
-      y: Math.floor(index / gridRows) * (DEFAULT_IMAGE_SIZE / gridColumns),
-      selected: false,
-    };
-  });
-
   function onDownloadSizeChange(event: React.ChangeEvent<HTMLInputElement>) {
     setImageSize(parseInt(event.target.value));
   }
@@ -59,38 +51,13 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
       <div className='fixed inset-0 flex items-center justify-center p-4'>
         <Dialog.Panel className='rounded bg-white p-4'>
           <Dialog.Title>Download "{title}"</Dialog.Title>
-          <Stage
+          <Preview
             ref={stageRef}
-            width={DEFAULT_IMAGE_SIZE}
-            height={DEFAULT_IMAGE_SIZE}
-            style={{
-              border: '1px solid',
-            }}
-          >
-            <Layer>
-              {gridCells.map((cell) => {
-                return (
-                  <Fragment key={cell.id}>
-                    {cell.background && (
-                      <Rect
-                        width={DEFAULT_IMAGE_SIZE / gridColumns}
-                        height={DEFAULT_IMAGE_SIZE / gridRows}
-                        x={cell.x}
-                        y={cell.y}
-                        fill={cell.background}
-                      />
-                    )}
-                    {cell.shape && (
-                      <ShapeFactory
-                        cell={cell}
-                        width={DEFAULT_IMAGE_SIZE / gridColumns}
-                      />
-                    )}
-                  </Fragment>
-                );
-              })}
-            </Layer>
-          </Stage>
+            size={DEFAULT_IMAGE_SIZE}
+            cells={cells}
+            columns={gridColumns}
+            rows={gridRows}
+          />
           <form onSubmit={onDownloadFormSubmit}>
             <Input
               type='number'
