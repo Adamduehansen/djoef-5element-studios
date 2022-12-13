@@ -1,12 +1,9 @@
 import { Dialog } from '@headlessui/react';
 import Konva from 'konva';
-import React, { Fragment, useRef, useState } from 'react';
-import { Layer, Rect, Stage } from 'react-konva';
+import React, { useRef, useState } from 'react';
 import { useDocument } from '../lib/DocumentProvider';
-import { GridCell } from './Grid';
-import Input from './Input';
+import Input from '../ui/Input';
 import Preview from './Preview';
-import ShapeFactory from './Shape';
 
 interface Props {
   open: boolean;

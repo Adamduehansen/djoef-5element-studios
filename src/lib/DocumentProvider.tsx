@@ -8,7 +8,7 @@ import {
   DocumentDto,
   updateTitleOfDocument,
   updateCellsForDocument,
-  addNewDocument,
+  createNewDocument,
   updateCellSizeOfDocument,
 } from './db';
 
@@ -29,12 +29,7 @@ function DocumentProvider({
       const documentDto = await getDocument(id!);
 
       if (!documentDto) {
-        // throw new Error(`Document not found for id: ${id}`);
-        addNewDocument(id!, {
-          title: id!,
-          gridRows: 4,
-          gridColumns: 4,
-        });
+        throw new Error(`Document not found for id: ${id}`);
       }
 
       setDocument(documentDto);

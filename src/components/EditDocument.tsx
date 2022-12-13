@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDocument } from '../lib/DocumentProvider';
-import Input from './Input';
+import Input from '../ui/Input';
 
 interface Props {
   onDownload: (title: string) => void;

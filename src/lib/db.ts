@@ -12,7 +12,7 @@ export interface DocumentDto {
   cellSize: number;
 }
 
-type NewDocumentOptions = Pick<
+export type NewDocumentOptions = Pick<
   DocumentDto,
   'title' | 'gridRows' | 'gridColumns'
 >;
@@ -41,14 +41,14 @@ export async function getDocument(
   return await db.get('documents', id);
 }
 
-export async function addNewDocument(
-  id: string,
+export async function createNewDocument(
   newDocument: NewDocumentOptions
-) {
+): Promise<string> {
   const db = await getDB();
   const transaction = db.transaction('documents', 'readwrite');
   const store = transaction.objectStore('documents');
   const { gridColumns, gridRows } = newDocument;
+  const id = crypto.randomUUID();
   store.add(
     {
       ...newDocument,
@@ -64,6 +64,7 @@ export async function addNewDocument(
     id
   );
   await transaction.done;
+  return id;
 }
 
 export async function updateTitleOfDocument(id: string, title: string) {

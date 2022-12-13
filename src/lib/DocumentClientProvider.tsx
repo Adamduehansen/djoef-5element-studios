@@ -1,12 +1,14 @@
 import React, { createContext, useContext } from 'react';
-import { DocumentDto } from './db';
+import { DocumentDto, NewDocumentOptions } from './db';
 
 interface DocumentClientProps {
   getAllDocuments: () => Promise<DocumentDto[]>;
+  createDocument: (options: NewDocumentOptions) => Promise<string>;
 }
 
 const DocumentClient = createContext<DocumentClientProps>({
   getAllDocuments: () => Promise.resolve([]),
+  createDocument: () => Promise.resolve(''),
 });
 
 interface DocumentClientProviderProps extends React.PropsWithChildren {
