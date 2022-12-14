@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DocumentList from '../components/DocumentList';
 import NewDialog from '../components/NewDialog';
-import { getAllDocuments, createNewDocument } from '../lib/db';
+import { getAllDocuments, createNewDocument, deleteDocument } from '../lib/db';
 import DocumentClientProvider from '../lib/DocumentClientProvider';
 import Button from '../ui/Button';
 
@@ -21,6 +21,7 @@ function Home(): JSX.Element {
       client={{
         getAllDocuments: getAllDocuments,
         createDocument: createNewDocument,
+        deleteDocument: deleteDocument,
       }}
     >
       <h1>Home</h1>

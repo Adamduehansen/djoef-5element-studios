@@ -127,3 +127,10 @@ export async function getAllDocuments(): Promise<DocumentDto[]> {
   const store = transaction.objectStore('documents');
   return await store.getAll();
 }
+
+export async function deleteDocument(id: string) {
+  const db = await getDB();
+  const transaction = db.transaction('documents', 'readwrite');
+  const store = transaction.objectStore('documents');
+  await store.delete(id);
+}
