@@ -98,36 +98,35 @@ function EditorGrid(): JSX.Element {
         }}
       >
         <Layer>
-          {gridCells.map((row) => {
-            return row.map((colCell) => {
+          {gridCells
+            .flat()
+            .sort((cell) => (cell.selected ? 1 : -1))
+            .map((cell) => {
               return (
-                <Fragment key={colCell.id}>
-                  {colCell.background && (
+                <Fragment key={cell.id}>
+                  {cell.background && (
                     <Rect
                       width={cellSize}
                       height={cellSize}
-                      x={colCell.x}
-                      y={colCell.y}
-                      fill={colCell.background}
+                      x={cell.x}
+                      y={cell.y}
+                      fill={cell.background}
                     />
                   )}
-                  {colCell.shape && (
-                    <ShapeFactory cell={colCell} width={cellSize} />
-                  )}
+                  {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
                   <Rect
-                    key={colCell.id}
+                    key={cell.id}
                     width={cellSize}
                     height={cellSize}
-                    stroke={colCell.selected ? 'grey' : 'lightgrey'}
+                    stroke={cell.selected ? 'grey' : 'lightgrey'}
                     strokeEnabled={showGrid}
-                    x={colCell.x}
-                    y={colCell.y}
-                    onClick={makeCellSelectedHandler(colCell.id)}
+                    x={cell.x}
+                    y={cell.y}
+                    onClick={makeCellSelectedHandler(cell.id)}
                   />
                 </Fragment>
               );
-            });
-          })}
+            })}
         </Layer>
       </Stage>
     </div>
