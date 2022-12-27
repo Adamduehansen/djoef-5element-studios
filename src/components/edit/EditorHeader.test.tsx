@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { describe, test, expect } from 'vitest';
 import Document from '../../contexts/Document';
 import EditorHeader from './EditorHeader';
@@ -14,7 +15,10 @@ describe('EditorHeader', () => {
         }}
       >
         <EditorHeader />
-      </Document.Provider>
+      </Document.Provider>,
+      {
+        wrapper: BrowserRouter,
+      }
     );
 
     // Act

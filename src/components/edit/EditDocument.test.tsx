@@ -25,38 +25,4 @@ describe('EditorHeader', () => {
     // Assert
     expect(titleInput).toBeInTheDocument();
   });
-
-  test('should render "unsaved changes" elements to title input', async () => {
-    // Arrange
-    render(
-      <Document.Provider
-        // @ts-ignore
-        value={{
-          title: 'any-title',
-        }}
-      >
-        <EditDocument onDownload={() => {}} />
-      </Document.Provider>
-    );
-
-    // Act
-    const titleInput = await screen.findByRole('textbox', {
-      name: 'Titel',
-    });
-
-    fireEvent.change(titleInput, {
-      target: {
-        value: 'changed',
-      },
-    });
-
-    const asterix = await screen.findByText('*');
-    const updateButton = await screen.findByRole('button', {
-      name: 'Opdater Titel',
-    });
-
-    // Assert
-    expect(asterix).toBeInTheDocument();
-    expect(updateButton).toBeInTheDocument();
-  });
 });
