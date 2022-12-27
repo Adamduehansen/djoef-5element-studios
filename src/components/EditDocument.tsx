@@ -10,11 +10,6 @@ function EditDocument({ onDownload }: Props): JSX.Element {
   const { title, setTitle, showGrid, setShowGrid, cellSize, setCellSize } =
     useDocument();
 
-  const [documentTitle, setDocumentTitle] = useState(title);
-  const [documentCellSize, setDocumentCellSize] = useState<number | undefined>(
-    cellSize
-  );
-
   function makeOnGridChange() {
     return function () {
       setShowGrid(!showGrid);
@@ -22,27 +17,13 @@ function EditDocument({ onDownload }: Props): JSX.Element {
   }
 
   function onDocumentTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setDocumentTitle(event.target.value);
+    setTitle(event.target.value);
   }
 
   function onDocumentCellSizeChange(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
-    setDocumentCellSize(parseInt(event.target.value));
-  }
-
-  function onTitleChangeSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    setTitle(documentTitle);
-  }
-
-  function onCellSizeChangeSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    if (!documentCellSize) {
-      return;
-    }
-
-    setCellSize(documentCellSize);
+    setCellSize(parseInt(event.target.value));
   }
 
   function makeDownloadHandler() {
@@ -53,16 +34,12 @@ function EditDocument({ onDownload }: Props): JSX.Element {
 
   return (
     <>
-      <form onSubmit={onTitleChangeSubmit} className='flex flex-col'>
-        <Input
-          type='text'
-          text='Titel'
-          value={documentTitle}
-          onChange={onDocumentTitleChange}
-          changed={title !== documentTitle}
-        />
-        <button>Opdater Titel</button>
-      </form>
+      <Input
+        type='text'
+        text='Titel'
+        value={title}
+        onChange={onDocumentTitleChange}
+      />
       <div>
         <label>
           <input
@@ -73,21 +50,15 @@ function EditDocument({ onDownload }: Props): JSX.Element {
           Vis gitter
         </label>
       </div>
-      <form onSubmit={onCellSizeChangeSubmit}>
-        <div className='flex'>
-          <Input
-            type='range'
-            text='Celle størrelse (px)'
-            value={documentCellSize || ''}
-            min='100'
-            max='500'
-            step='50'
-            onChange={onDocumentCellSizeChange}
-            changed={cellSize !== documentCellSize}
-          />
-        </div>
-        <button>Opdater Cellstørrelse</button>
-      </form>
+      <Input
+        type='range'
+        text='Celle størrelse (px)'
+        value={cellSize || ''}
+        min='100'
+        max='500'
+        step='10'
+        onChange={onDocumentCellSizeChange}
+      />
       <button onClick={makeDownloadHandler()}>Download</button>
     </>
   );
