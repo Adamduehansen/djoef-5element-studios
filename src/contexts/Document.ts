@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import Cell from '../lib/Cell';
+import { Grid } from '../lib/Cell';
 import { DocumentDto } from '../lib/db';
 import Shape from '../lib/Shape';
 
@@ -7,7 +7,7 @@ export interface DocumentProps extends DocumentDto {
   setTitle: (value: string) => void;
   showGrid: boolean;
   setShowGrid: (value: boolean) => void;
-  setCells: (value: Cell[]) => void;
+  setGrid: (value: Grid) => void;
   setCellSize: (value: number) => void;
   selectedCellId?: string;
   setSelectedCellId: (id?: string) => void;
@@ -19,14 +19,15 @@ export interface DocumentProps extends DocumentDto {
 }
 
 const Document = createContext<DocumentProps>({
+  id: '',
   title: '',
   setTitle: () => {},
   showGrid: true,
   setShowGrid: () => {},
   gridRows: 0,
   gridColumns: 0,
-  cells: [],
-  setCells: () => {},
+  grid: [],
+  setGrid: () => {},
   cellSize: 100,
   setCellSize: () => {},
   setSelectedCellId: () => {},

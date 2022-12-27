@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { Fragment, useEffect, useRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import type Cell from '../lib/Cell';
+import { Grid } from '../lib/Cell';
 import { useDocument } from '../lib/DocumentProvider';
 import ShapeFactory from './Shape';
 
@@ -11,39 +12,31 @@ export interface GridCell extends Cell {
   selected: boolean;
 }
 
-interface MakeGridOptions {
-  cells: Cell[];
-  cols: number;
-  rows: number;
-  selectedCellId?: string;
-  cellSize: number;
-}
+type CellGrid = GridCell[][];
 
-function makeGridCells({
-  cells,
-  cols,
-  rows,
-  selectedCellId,
-  cellSize,
-}: MakeGridOptions): GridCell[] {
-  return cells
-    .map((cell, index): GridCell => {
+function createGrid(options: {
+  grid: Grid;
+  cellsSize: number;
+  selectedCellId?: string;
+}): CellGrid {
+  return options.grid.map((row, rowIndex) => {
+    return row.map((cell, colIndex): GridCell => {
       return {
         ...cell,
-        x: (index % cols) * cellSize,
-        y: Math.floor(index / rows) * cellSize,
-        selected: selectedCellId === cell.id,
+        x: colIndex * options.cellsSize,
+        y: rowIndex * options.cellsSize,
+        selected: options.selectedCellId === cell.id,
       };
-    })
-    .sort((cell) => (cell.selected ? 1 : -1));
+    });
+  });
 }
 
-function Grid(): JSX.Element {
+function EditorGrid(): JSX.Element {
   const {
     showGrid,
     gridColumns,
     gridRows,
-    cells,
+    grid,
     cellSize,
     setSelectedCellId,
     selectedCellId,
@@ -69,11 +62,9 @@ function Grid(): JSX.Element {
     };
   }, []);
 
-  const gridCells = makeGridCells({
-    cells: cells,
-    cols: gridColumns,
-    rows: gridRows,
-    cellSize: cellSize,
+  const gridCells = createGrid({
+    grid: grid,
+    cellsSize: cellSize,
     selectedCellId: selectedCellId,
   });
 
@@ -107,31 +98,35 @@ function Grid(): JSX.Element {
         }}
       >
         <Layer>
-          {gridCells.map((cell) => {
-            return (
-              <Fragment key={cell.id}>
-                {cell.background && (
+          {gridCells.map((row) => {
+            return row.map((colCell) => {
+              return (
+                <Fragment key={colCell.id}>
+                  {colCell.background && (
+                    <Rect
+                      width={cellSize}
+                      height={cellSize}
+                      x={colCell.x}
+                      y={colCell.y}
+                      fill={colCell.background}
+                    />
+                  )}
+                  {colCell.shape && (
+                    <ShapeFactory cell={colCell} width={cellSize} />
+                  )}
                   <Rect
+                    key={colCell.id}
                     width={cellSize}
                     height={cellSize}
-                    x={cell.x}
-                    y={cell.y}
-                    fill={cell.background}
+                    stroke={colCell.selected ? 'grey' : 'lightgrey'}
+                    strokeEnabled={showGrid}
+                    x={colCell.x}
+                    y={colCell.y}
+                    onClick={makeCellSelectedHandler(colCell.id)}
                   />
-                )}
-                {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
-                <Rect
-                  key={cell.id}
-                  width={cellSize}
-                  height={cellSize}
-                  stroke={cell.selected ? 'grey' : 'lightgrey'}
-                  strokeEnabled={showGrid}
-                  x={cell.x}
-                  y={cell.y}
-                  onClick={makeCellSelectedHandler(cell.id)}
-                />
-              </Fragment>
-            );
+                </Fragment>
+              );
+            });
           })}
         </Layer>
       </Stage>
@@ -139,4 +134,4 @@ function Grid(): JSX.Element {
   );
 }
 
-export default Grid;
+export default EditorGrid;

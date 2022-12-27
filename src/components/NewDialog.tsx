@@ -14,7 +14,8 @@ function Backdrop(): JSX.Element {
 }
 
 function NewDialog({ open, onClose }: Props): JSX.Element {
-  const [size, setSize] = useState(4);
+  const [columns, setColumns] = useState(4);
+  const [rows, setRows] = useState(4);
   const [title, setTitle] = useState(crypto.randomUUID());
 
   const { createDocument } = useDocumentClient();
@@ -26,8 +27,8 @@ function NewDialog({ open, onClose }: Props): JSX.Element {
     event.preventDefault();
     const id = await createDocument({
       title: title,
-      gridRows: size,
-      gridColumns: size,
+      gridRows: rows,
+      gridColumns: columns,
     });
     navigate(`editor/${id}`);
   }
@@ -47,11 +48,19 @@ function NewDialog({ open, onClose }: Props): JSX.Element {
               }}
             />
             <Input
-              text='Størrelse (bredde/højde)'
+              text='Kolonner'
               type='number'
-              value={size}
+              value={columns}
               onChange={(event) => {
-                setSize(parseInt(event.target.value));
+                setColumns(parseInt(event.target.value));
+              }}
+            />
+            <Input
+              text='Rækker'
+              type='number'
+              value={rows}
+              onChange={(event) => {
+                setRows(parseInt(event.target.value));
               }}
             />
             <button>Opret</button>

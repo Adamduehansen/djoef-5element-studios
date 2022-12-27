@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DownloadDialog from '../components/DownloadDialog';
 import EditDocument from '../components/EditDocument';
 import EditorHeader from '../components/EditorHeader';
-import Grid from '../components/Grid';
+import EditorGrid from '../components/EditorGrid';
 import SelectedCell from '../components/SelectedCell';
 import DocumentProvider from '../lib/DocumentProvider';
 
@@ -18,7 +18,7 @@ function Editor(): JSX.Element {
             <SelectedCell />
           </div>
           <div className='w-full flex justify-center items-center overflow-hidden'>
-            <Grid />
+            <EditorGrid />
           </div>
           <div className='h-full w-[300px] border-l'>
             <EditDocument

@@ -1,12 +1,12 @@
 import { openDB, DBSchema } from 'idb';
-import Cell from './Cell';
+import Cell, { Grid } from './Cell';
 
 const DEFAULT_CELL_SIZE = 100;
 
 export interface DocumentDto {
   id: string;
   title: string;
-  cells: Cell[];
+  grid: Grid;
   gridRows: number;
   gridColumns: number;
   cellSize: number;
@@ -16,6 +16,21 @@ export type NewDocumentOptions = Pick<
   DocumentDto,
   'title' | 'gridRows' | 'gridColumns'
 >;
+
+export function createGrid(rows: number, cols: number): Grid {
+  const grid: Grid = [];
+  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+    const row: Cell[] = [];
+    for (let colIndex = 0; colIndex < cols; colIndex++) {
+      row.push({
+        id: `${rowIndex}-${colIndex}`,
+        rotation: 0,
+      });
+    }
+    grid.push(row);
+  }
+  return grid;
+}
 
 interface DB extends DBSchema {
   documents: {
@@ -41,25 +56,20 @@ export async function getDocument(
   return await db.get('documents', id);
 }
 
-export async function createNewDocument(
-  newDocument: NewDocumentOptions
+export async function createDocument(
+  document: NewDocumentOptions
 ): Promise<string> {
   const db = await getDB();
   const transaction = db.transaction('documents', 'readwrite');
   const store = transaction.objectStore('documents');
-  const { gridColumns, gridRows } = newDocument;
+  const { gridColumns, gridRows } = document;
   const id = crypto.randomUUID();
   store.add(
     {
-      ...newDocument,
+      ...document,
       id: id,
       cellSize: DEFAULT_CELL_SIZE,
-      cells: Array.from(Array(gridColumns * gridRows)).map((_, index): Cell => {
-        return {
-          id: index.toString(),
-          rotation: 0,
-        };
-      }),
+      grid: createGrid(gridRows, gridColumns),
     },
     id
   );
@@ -103,7 +113,7 @@ export async function updateCellSizeOfDocument(id: string, cellSize: number) {
   await transaction.done;
 }
 
-export async function updateCellsForDocument(id: string, cells: Cell[]) {
+export async function updateCellsForDocument(id: string, cells: Grid) {
   const db = await getDB();
   const transaction = db.transaction('documents', 'readwrite');
   const store = transaction.objectStore('documents');
@@ -112,7 +122,7 @@ export async function updateCellsForDocument(id: string, cells: Cell[]) {
     await store.put(
       {
         ...document,
-        cells: cells,
+        grid: cells,
       },
       id
     );

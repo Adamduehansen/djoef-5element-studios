@@ -19,7 +19,7 @@ describe('SelectedCell', () => {
       <TestDocument
         // @ts-ignore
         document={{
-          cells: [
+          grid: [
             {
               id: '1',
               rotation: 0,
@@ -60,7 +60,7 @@ describe('SelectedCell', () => {
       <TestDocument
         // @ts-ignore
         document={{
-          cells: [
+          grid: [
             {
               id: '1',
               rotation: 0,

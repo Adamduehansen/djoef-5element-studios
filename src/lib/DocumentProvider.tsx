@@ -1,14 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
-import Cell from './Cell';
+import Cell, { Grid } from './Cell';
 import Shape from './Shape';
 import {
   getDocument,
   DocumentDto,
   updateTitleOfDocument,
   updateCellsForDocument,
-  createNewDocument,
   updateCellSizeOfDocument,
 } from './db';
 
@@ -17,7 +16,7 @@ function DocumentProvider({
 }: React.PropsWithChildren): JSX.Element | null {
   const [title, setTitle] = useState<string>();
   const [showGrid, setShowGrid] = useState(true);
-  const [cells, setCells] = useState<Cell[]>([]);
+  const [grid, setGrid] = useState<Grid>([]);
   const [cellSize, setCellSize] = useState<number>();
   const [selectedCellId, setSelectedCellId] = useState<string>();
   const [document, setDocument] = useState<DocumentDto>();
@@ -34,7 +33,7 @@ function DocumentProvider({
 
       setDocument(documentDto);
       setTitle(documentDto!.title);
-      setCells(documentDto!.cells);
+      setGrid(documentDto!.grid);
       setCellSize(documentDto!.cellSize);
     }
     initDocument();
@@ -48,11 +47,11 @@ function DocumentProvider({
   }, [title]);
 
   useEffect(() => {
-    if (cells.length === 0) {
+    if (grid.length === 0) {
       return;
     }
-    updateCellsForDocument(id!, cells);
-  }, [cells]);
+    updateCellsForDocument(id!, grid);
+  }, [grid]);
 
   useEffect(() => {
     if (!cellSize) {
@@ -65,14 +64,19 @@ function DocumentProvider({
     return null;
   }
 
-  function updateCell(cellId: string, updateCellHandler: (cell: Cell) => Cell) {
-    setCells((currentCells) => {
-      return currentCells.map((cell) => {
-        if (cell.id !== cellId) {
-          return cell;
-        }
+  function updateCell(
+    cellId: string,
+    updateCellHandler: (cell: Cell) => Cell
+  ): void {
+    setGrid((currentGrid) => {
+      return currentGrid.map((row) => {
+        return row.map((col) => {
+          if (col.id !== cellId) {
+            return col;
+          }
 
-        return updateCellHandler(cell);
+          return updateCellHandler(col);
+        });
       });
     });
   }
@@ -125,14 +129,15 @@ function DocumentProvider({
   return (
     <Document.Provider
       value={{
+        id: document?.id || '',
         title: title || '',
         setTitle: setTitle,
         showGrid: showGrid,
         setShowGrid: setShowGrid,
-        cells: cells,
+        grid: grid,
         cellSize: cellSize || 0,
         setCellSize: setCellSize,
-        setCells: setCells,
+        setGrid: setGrid,
         gridColumns: document?.gridColumns || 0,
         gridRows: document?.gridRows || 0,
         selectedCellId: selectedCellId,

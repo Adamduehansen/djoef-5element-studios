@@ -26,7 +26,7 @@ function ListBoxOption({ text, value }: ListBoxOptionProps): JSX.Element {
 function SelectedCell(): JSX.Element | null {
   const {
     selectedCellId,
-    cells,
+    grid,
     setCellShape,
     setCellColor,
     setCellBackground,
@@ -58,7 +58,7 @@ function SelectedCell(): JSX.Element | null {
     rotateCellRight(selectedCellId!);
   }
 
-  const selectedCell = cells.find((cells) => cells.id === selectedCellId)!;
+  const selectedCell = grid.flat().find((cell) => cell.id === selectedCellId)!;
 
   return (
     <>

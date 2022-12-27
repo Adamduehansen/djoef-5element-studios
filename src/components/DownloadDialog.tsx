@@ -19,25 +19,20 @@ function downloadURI(uri: string, name: string) {
   document.body.removeChild(link);
 }
 
-const DEFAULT_IMAGE_SIZE = 400;
-
 function Backdrop(): JSX.Element {
   return <div className='fixed inset-0 bg-black/30' aria-hidden='true' />;
 }
 
 function DownloadDialog({ open, onClose }: Props): JSX.Element {
-  const [imageSize, setImageSize] = useState(DEFAULT_IMAGE_SIZE);
   const stageRef = useRef<Konva.Stage>(null);
-  const { title, cells, gridColumns, gridRows } = useDocument();
+  const { title, grid, gridColumns, gridRows } = useDocument();
 
-  function onDownloadSizeChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setImageSize(parseInt(event.target.value));
-  }
+  function onDownloadSizeChange(event: React.ChangeEvent<HTMLInputElement>) {}
 
   function onDownloadFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const uri = stageRef.current!.toDataURL({
-      pixelRatio: imageSize / DEFAULT_IMAGE_SIZE,
+      // pixelRatio: imageSize / DEFAULT_IMAGE_SIZE,
     });
     downloadURI(uri, title);
   }
@@ -48,21 +43,23 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
       <div className='fixed inset-0 flex items-center justify-center p-4'>
         <Dialog.Panel className='rounded bg-white p-4'>
           <Dialog.Title>Download "{title}"</Dialog.Title>
-          <Preview
-            ref={stageRef}
-            size={DEFAULT_IMAGE_SIZE}
-            cells={cells}
-            columns={gridColumns}
-            rows={gridRows}
-          />
+          <div className='flex flex-col items-center justify-center'>
+            <Preview
+              ref={stageRef}
+              cellSize={64}
+              grid={grid}
+              columns={gridColumns}
+              rows={gridRows}
+            />
+          </div>
           <form onSubmit={onDownloadFormSubmit}>
-            <Input
+            {/* <Input
               type='number'
               text='Størrelse'
               value={imageSize}
               onChange={onDownloadSizeChange}
               autoFocus
-            />
+            /> */}
             <button>Download</button>
           </form>
         </Dialog.Panel>

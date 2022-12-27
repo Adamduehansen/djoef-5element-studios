@@ -8,4 +8,6 @@ interface Cell {
   rotation: number;
 }
 
+export type Grid = Cell[][];
+
 export default Cell;

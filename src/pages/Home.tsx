@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DocumentList from '../components/DocumentList';
 import NewDialog from '../components/NewDialog';
-import { getAllDocuments, createNewDocument, deleteDocument } from '../lib/db';
+import { getAllDocuments, createDocument, deleteDocument } from '../lib/db';
 import DocumentClientProvider from '../lib/DocumentClientProvider';
 import Button from '../ui/Button';
 
@@ -20,7 +20,7 @@ function Home(): JSX.Element {
     <DocumentClientProvider
       client={{
         getAllDocuments: getAllDocuments,
-        createDocument: createNewDocument,
+        createDocument: createDocument,
         deleteDocument: deleteDocument,
       }}
     >

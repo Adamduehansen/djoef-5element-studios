@@ -25,7 +25,7 @@ function DocumentList(): JSX.Element {
 
   return (
     <ul>
-      {documents.map(({ id, title, gridColumns, gridRows, cells }) => {
+      {documents.map(({ id, title, gridColumns, gridRows, grid }) => {
         return (
           <li key={id} className='flex'>
             <Link to={`/editor/${id}`}>
@@ -37,10 +37,10 @@ function DocumentList(): JSX.Element {
                   </div>
                 </div>
                 <Preview
-                  cells={cells}
+                  grid={grid}
                   columns={gridColumns}
                   rows={gridRows}
-                  size={100}
+                  cellSize={32}
                 />
               </div>
             </Link>
