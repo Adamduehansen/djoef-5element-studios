@@ -1,16 +1,10 @@
 import Konva from 'konva';
 import { Fragment, useEffect, useRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
-import type Cell from '../lib/Cell';
-import { Grid } from '../lib/Cell';
-import { useDocument } from '../lib/DocumentProvider';
-import ShapeFactory from './Shape';
-
-export interface GridCell extends Cell {
-  x: number;
-  y: number;
-  selected: boolean;
-}
+import { Grid } from '../../lib/types/Cell';
+import { useDocument } from '../../lib/DocumentProvider';
+import { GridCell } from '../../lib/types/GridCell';
+import ShapeFactory from '../Shape';
 
 type CellGrid = GridCell[][];
 

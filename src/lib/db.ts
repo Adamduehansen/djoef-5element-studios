@@ -1,5 +1,5 @@
 import { openDB, DBSchema } from 'idb';
-import Cell, { Grid } from './Cell';
+import Cell, { Grid } from './types/Cell';
 
 const DEFAULT_CELL_SIZE = 100;
 

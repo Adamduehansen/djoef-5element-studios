@@ -1,7 +1,7 @@
 import { Listbox } from '@headlessui/react';
 import { Fragment } from 'react';
-import { useDocument } from '../lib/DocumentProvider';
-import Shape, { shapes } from '../lib/Shape';
+import { useDocument } from '../../lib/DocumentProvider';
+import Shape, { shapes } from '../../lib/types/Shape';
 
 const shapeDictionary = new Map<Shape, string>();
 shapeDictionary.set('arc', 'Bue');

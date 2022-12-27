@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import DownloadDialog from '../components/DownloadDialog';
-import EditDocument from '../components/EditDocument';
-import EditorHeader from '../components/EditorHeader';
-import EditorGrid from '../components/EditorGrid';
-import SelectedCell from '../components/SelectedCell';
+import EditDocument from '../components/edit/EditDocument';
+import EditorHeader from '../components/edit/EditorHeader';
+import EditorGrid from '../components/edit/EditorGrid';
+import SelectedCell from '../components/edit/SelectedCell';
 import DocumentProvider from '../lib/DocumentProvider';
 
 function Editor(): JSX.Element {

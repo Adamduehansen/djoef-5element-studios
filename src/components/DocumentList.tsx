@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DocumentDto } from '../lib/db';
 import { useDocumentClient } from '../lib/DocumentClientProvider';
-import Button from '../ui/Button';
+import Button from './ui/Button';
 import Preview from './Preview';
 
 function DocumentList(): JSX.Element {

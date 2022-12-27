@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useDocument } from '../lib/DocumentProvider';
+import { useDocument } from '../../lib/DocumentProvider';
 
 function EditorHeader(): JSX.Element {
   const { title } = useDocument();

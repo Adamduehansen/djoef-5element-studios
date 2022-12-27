@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { Grid } from '../lib/Cell';
+import { Grid } from '../lib/types/Cell';
 import { DocumentDto } from '../lib/db';
-import Shape from '../lib/Shape';
+import Shape from '../lib/types/Shape';
 
 export interface DocumentProps extends DocumentDto {
   setTitle: (value: string) => void;

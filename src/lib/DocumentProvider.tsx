@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
-import Cell, { Grid } from './Cell';
-import Shape from './Shape';
+import Cell, { Grid } from './types/Cell';
+import Shape from './types/Shape';
 import {
   getDocument,
   DocumentDto,

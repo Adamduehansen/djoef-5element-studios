@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useDocument } from '../lib/DocumentProvider';
+import { useDocument } from '../../lib/DocumentProvider';
 import Input from '../ui/Input';
 
 interface Props {

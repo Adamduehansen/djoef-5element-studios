@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, test, expect } from 'vitest';
-import Document from '../contexts/Document';
+import Document from '../../contexts/Document';
 import EditorHeader from './EditorHeader';
 
 describe('EditorHeader', () => {

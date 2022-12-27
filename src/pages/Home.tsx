@@ -3,7 +3,7 @@ import DocumentList from '../components/DocumentList';
 import NewDialog from '../components/NewDialog';
 import { getAllDocuments, createDocument, deleteDocument } from '../lib/db';
 import DocumentClientProvider from '../lib/DocumentClientProvider';
-import Button from '../ui/Button';
+import Button from '../components/ui/Button';
 
 function Home(): JSX.Element {
   const [showNewDialog, setShowNewDialog] = useState(false);

@@ -1,4 +1,4 @@
-import { Grid } from './Cell';
+import { Grid } from './types/Cell';
 import { createGrid } from './db';
 
 describe('db', () => {

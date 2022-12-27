@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { describe, test, expect } from 'vitest';
-import Document, { DocumentProps } from '../contexts/Document';
+import Document, { DocumentProps } from '../../contexts/Document';
 import SelectedCell from './SelectedCell';
 
 interface TestDocumentProps extends PropsWithChildren {

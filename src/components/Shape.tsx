@@ -1,7 +1,7 @@
 import { ComponentType } from 'react';
 import { Shape as KonvaShape, Circle as KonvaCircle } from 'react-konva';
-import Shape from '../lib/Shape';
-import { GridCell } from './EditorGrid';
+import { GridCell } from '../lib/types/GridCell';
+import Shape from '../lib/types/Shape';
 
 interface ShapeProps {
   cell: GridCell;

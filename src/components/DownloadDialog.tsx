@@ -2,7 +2,7 @@ import { Dialog } from '@headlessui/react';
 import Konva from 'konva';
 import React, { useRef, useState } from 'react';
 import { useDocument } from '../lib/DocumentProvider';
-import Input from '../ui/Input';
+import Input from './ui/Input';
 import Preview from './Preview';
 
 interface Props {

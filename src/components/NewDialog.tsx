@@ -2,7 +2,7 @@ import { Dialog } from '@headlessui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDocumentClient } from '../lib/DocumentClientProvider';
-import Input from '../ui/Input';
+import Input from './ui/Input';
 
 interface Props {
   open: boolean;

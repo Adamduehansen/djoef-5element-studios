@@ -2,14 +2,9 @@ import Konva from 'konva';
 import React from 'react';
 import { Fragment } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
-import Cell, { Grid } from '../lib/Cell';
+import { Grid } from '../lib/types/Cell';
+import { GridCell } from '../lib/types/GridCell';
 import ShapeFactory from './Shape';
-
-export interface GridCell extends Cell {
-  x: number;
-  y: number;
-  selected: boolean;
-}
 
 interface Props {
   cellSize: number;
@@ -44,7 +39,7 @@ const Preview = React.forwardRef<Konva.Stage, Props>(
           {gridCells.map((row) => {
             return row.map((cell) => {
               return (
-                <Fragment>
+                <Fragment key={cell.id}>
                   {cell.background && (
                     <Rect
                       width={cellSize}
