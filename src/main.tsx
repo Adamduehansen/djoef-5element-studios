@@ -5,16 +5,21 @@ import Editor from './pages/Editor';
 import Home from './pages/Home';
 import './index.css';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <Home />,
+    },
+    {
+      path: '/editor/:id',
+      element: <Editor />,
+    },
+  ],
   {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/editor/:id',
-    element: <Editor />,
-  },
-]);
+    basename: '/djoef-5element-studios/',
+  }
+);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
