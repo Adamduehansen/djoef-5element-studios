@@ -17,13 +17,16 @@ describe('SelectedCell', () => {
     // Arrange
     render(
       <TestDocument
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore: disabled due to many unrelated properties.
         document={{
           grid: [
-            {
-              id: '1',
-              rotation: 0,
-            },
+            [
+              {
+                id: '1',
+                rotation: 0,
+              },
+            ],
           ],
           selectedCellId: '1',
         }}
@@ -58,16 +61,19 @@ describe('SelectedCell', () => {
     // Arrange
     render(
       <TestDocument
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore: disabled due to many unrelated properties.
         document={{
           grid: [
-            {
-              id: '1',
-              rotation: 0,
-              shape: 'circle',
-              color: 'any-color',
-              background: 'any-background',
-            },
+            [
+              {
+                id: '1',
+                rotation: 0,
+                shape: 'circle',
+                color: 'any-color',
+                background: 'any-background',
+              },
+            ],
           ],
           selectedCellId: '1',
         }}
