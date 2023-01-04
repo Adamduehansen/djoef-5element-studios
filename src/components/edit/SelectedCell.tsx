@@ -2,6 +2,7 @@ import { Listbox } from '@headlessui/react';
 import { Fragment } from 'react';
 import { useDocument } from '../../lib/DocumentProvider';
 import Shape, { shapes } from '../../lib/types/Shape';
+import ColorPicker from '../ui/ColorPicker';
 
 const shapeDictionary = new Map<Shape, string>();
 shapeDictionary.set('arc', 'Bue');
@@ -16,9 +17,13 @@ interface ListBoxOptionProps {
 function ListBoxOption({ text, value }: ListBoxOptionProps): JSX.Element {
   return (
     <Listbox.Option value={value} as={Fragment}>
-      {({ active, selected }) => (
-        <li className={selected ? 'text-green-500' : 'text-red-500'}>{text}</li>
-      )}
+      {({ active, selected }): JSX.Element => {
+        return (
+          <li className={selected ? 'text-green-500' : 'text-red-500'}>
+            {text}
+          </li>
+        );
+      }}
     </Listbox.Option>
   );
 }
@@ -38,45 +43,52 @@ function SelectedCell(): JSX.Element | null {
     return <div>Vælg en celle</div>;
   }
 
-  function handleOnShapeChange(shape: Shape) {
-    setCellShape(selectedCellId!, shape);
+  function handleOnShapeChange(shape: Shape): void {
+    if (!selectedCellId) {
+      return;
+    }
+    setCellShape(selectedCellId, shape);
   }
 
-  function handleOnColorChange(color: string) {
-    setCellColor(selectedCellId!, color);
+  function handleOnColorChange(color: string): void {
+    if (!selectedCellId) {
+      return;
+    }
+    setCellColor(selectedCellId, color);
   }
 
-  function handleBackgroundChange(color: string) {
-    setCellBackground(selectedCellId!, color);
+  function handleBackgroundChange(color: string): void {
+    if (!selectedCellId) {
+      return;
+    }
+    setCellBackground(selectedCellId, color);
   }
 
-  function handleRotateLeft() {
-    rotateCellLeft(selectedCellId!);
+  function handleRotateLeft(): void {
+    if (!selectedCellId) {
+      return;
+    }
+    rotateCellLeft(selectedCellId);
   }
 
-  function handleRotateRight() {
-    rotateCellRight(selectedCellId!);
+  function handleRotateRight(): void {
+    if (!selectedCellId) {
+      return;
+    }
+    rotateCellRight(selectedCellId);
   }
 
-  const selectedCell = grid.flat().find((cell) => cell.id === selectedCellId)!;
+  const selectedCell = grid.flat().find((cell) => cell.id === selectedCellId);
+
+  if (!selectedCell) {
+    return null;
+  }
 
   return (
     <>
       <div>
-        <Listbox
-          value={selectedCell.background || ''}
-          onChange={handleBackgroundChange}
-        >
-          <Listbox.Button aria-label='background-button'>
-            Baggrund: {selectedCell.background || 'Ikke valgt'}
-          </Listbox.Button>
-          <Listbox.Options>
-            <ListBoxOption text='Ingen' value={undefined} />
-            {['red', 'green', 'blue'].map((color) => {
-              return <ListBoxOption key={color} value={color} text={color} />;
-            })}
-          </Listbox.Options>
-        </Listbox>
+        Baggrundsfarve:
+        <ColorPicker onColorSelect={handleBackgroundChange} />
       </div>
       <div>
         <Listbox
@@ -104,21 +116,8 @@ function SelectedCell(): JSX.Element | null {
         </Listbox>
       </div>
       <div>
-        <Listbox
-          value={selectedCell.color || ''}
-          onChange={handleOnColorChange}
-          disabled={selectedCell.shape ? false : true}
-        >
-          <Listbox.Button aria-label='color-button'>
-            Farve: {selectedCell.color || 'Ikke valgt'}
-          </Listbox.Button>
-          <Listbox.Options>
-            <ListBoxOption text='Ingen' value={undefined} />
-            {['red', 'green', 'blue'].map((color) => {
-              return <ListBoxOption key={color} value={color} text={color} />;
-            })}
-          </Listbox.Options>
-        </Listbox>
+        Figur farve:
+        <ColorPicker onColorSelect={handleOnColorChange} />
       </div>
       <div>
         <span className='block'>Rotate</span>
