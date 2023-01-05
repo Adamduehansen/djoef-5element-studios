@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  VITE_ROUTER_BASENAME: /djoef-5element-studios/
+
 jobs:
   build:
     name: Build

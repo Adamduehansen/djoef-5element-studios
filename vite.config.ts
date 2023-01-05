@@ -1,16 +1,20 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  base: '/djoef-5element-studios/',
-  plugins: [react()],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './testSetup.ts',
-  },
+export default defineConfig(({ mode }) => {
+  const environmentVariables = loadEnv(mode, process.cwd());
+
+  return {
+    base: environmentVariables.VITE_ROUTER_BASENAME,
+    plugins: [react()],
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './testSetup.ts',
+    },
+  };
 });

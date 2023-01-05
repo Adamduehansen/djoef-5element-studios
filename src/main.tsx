@@ -17,7 +17,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: '/djoef-5element-studios/',
+    basename: import.meta.env.BASE_URL,
   }
 );
 
