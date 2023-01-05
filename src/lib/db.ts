@@ -1,4 +1,4 @@
-import { openDB, DBSchema } from 'idb';
+import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import Cell, { Grid } from './types/Cell';
 
 const DEFAULT_CELL_SIZE = 100;
@@ -33,18 +33,16 @@ export function createGrid(rows: number, cols: number): Grid {
 }
 
 interface DB extends DBSchema {
-  documents: {
+  document: {
     key: string;
     value: DocumentDto;
   };
 }
 
-export async function getDB() {
+export async function getDB(): Promise<IDBPDatabase<DB>> {
   return await openDB<DB>('djoef-5element-editor', 1, {
     upgrade: function (db) {
-      db.createObjectStore('documents', {
-        keyPath: 'id',
-      });
+      db.createObjectStore('document');
     },
   });
 }
@@ -53,15 +51,15 @@ export async function getDocument(
   id: string
 ): Promise<DocumentDto | undefined> {
   const db = await getDB();
-  return await db.get('documents', id);
+  return await db.get('document', id);
 }
 
 export async function createDocument(
   document: NewDocumentOptions
 ): Promise<string> {
   const db = await getDB();
-  const transaction = db.transaction('documents', 'readwrite');
-  const store = transaction.objectStore('documents');
+  const transaction = db.transaction('document', 'readwrite');
+  const store = transaction.objectStore('document');
   const { gridColumns, gridRows } = document;
   const id = crypto.randomUUID();
   store.add(
@@ -79,8 +77,8 @@ export async function createDocument(
 
 export async function updateTitleOfDocument(id: string, title: string) {
   const db = await getDB();
-  const transaction = db.transaction('documents', 'readwrite');
-  const store = transaction.objectStore('documents');
+  const transaction = db.transaction('document', 'readwrite');
+  const store = transaction.objectStore('document');
   const document = await store.get(id);
   if (document) {
     await store.put(
@@ -97,8 +95,8 @@ export async function updateTitleOfDocument(id: string, title: string) {
 
 export async function updateCellSizeOfDocument(id: string, cellSize: number) {
   const db = await getDB();
-  const transaction = db.transaction('documents', 'readwrite');
-  const store = transaction.objectStore('documents');
+  const transaction = db.transaction('document', 'readwrite');
+  const store = transaction.objectStore('document');
   const document = await store.get(id);
   if (document) {
     await store.put(
@@ -115,8 +113,8 @@ export async function updateCellSizeOfDocument(id: string, cellSize: number) {
 
 export async function updateCellsForDocument(id: string, cells: Grid) {
   const db = await getDB();
-  const transaction = db.transaction('documents', 'readwrite');
-  const store = transaction.objectStore('documents');
+  const transaction = db.transaction('document', 'readwrite');
+  const store = transaction.objectStore('document');
   const document = await store.get(id);
   if (document) {
     await store.put(
@@ -133,14 +131,14 @@ export async function updateCellsForDocument(id: string, cells: Grid) {
 
 export async function getAllDocuments(): Promise<DocumentDto[]> {
   const db = await getDB();
-  const transaction = db.transaction('documents', 'readwrite');
-  const store = transaction.objectStore('documents');
+  const transaction = db.transaction('document', 'readwrite');
+  const store = transaction.objectStore('document');
   return await store.getAll();
 }
 
 export async function deleteDocument(id: string) {
   const db = await getDB();
-  const transaction = db.transaction('documents', 'readwrite');
-  const store = transaction.objectStore('documents');
+  const transaction = db.transaction('document', 'readwrite');
+  const store = transaction.objectStore('document');
   await store.delete(id);
 }
