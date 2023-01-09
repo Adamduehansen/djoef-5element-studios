@@ -10,7 +10,7 @@ function DocumentList(): JSX.Element {
   const { getAllDocuments, deleteDocument } = useDocumentClient();
 
   useEffect(() => {
-    async function getDocuments() {
+    async function getDocuments(): Promise<void> {
       setDocuements(await getAllDocuments());
     }
     getDocuments();
@@ -27,24 +27,26 @@ function DocumentList(): JSX.Element {
     <ul>
       {documents.map(({ id, title, gridColumns, gridRows, grid }) => {
         return (
-          <li key={id} className='flex'>
-            <Link to={`/editor/${id}`}>
-              <div className='flex'>
+          <li key={id} className='flex h-52 w-64 border'>
+            <Link to={`/editor/${id}`} className='overflow-hidden'>
+              <div className='flex flex-col justify-between h-full'>
                 <div>
-                  <div>{title}</div>
-                  <div>
-                    {gridColumns} x {gridRows}
+                  <div className='h-32'>
+                    <Preview
+                      grid={grid}
+                      columns={gridColumns}
+                      rows={gridRows}
+                      cellSize={64}
+                    />
                   </div>
+                  <div className='truncate'>{title}</div>
                 </div>
-                <Preview
-                  grid={grid}
-                  columns={gridColumns}
-                  rows={gridRows}
-                  cellSize={32}
-                />
+                <div className='flex justify-between'>
+                  {gridColumns} x {gridRows}
+                  <Button text='Slet' onClick={makeDeleteHandler(id)} />
+                </div>
               </div>
             </Link>
-            <Button text='Slet' onClick={makeDeleteHandler(id)} />
           </li>
         );
       })}
