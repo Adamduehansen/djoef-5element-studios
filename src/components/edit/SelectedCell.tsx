@@ -86,10 +86,10 @@ function SelectedCell(): JSX.Element | null {
 
   return (
     <>
-      <div>
-        Baggrundsfarve:
-        <ColorPicker onColorSelect={handleBackgroundChange} />
-      </div>
+      <ColorPicker
+        text='Baggrundsfarve'
+        onColorSelect={handleBackgroundChange}
+      />
       <div>
         <Listbox
           value={selectedCell.shape || ''}
@@ -115,10 +115,7 @@ function SelectedCell(): JSX.Element | null {
           </Listbox.Options>
         </Listbox>
       </div>
-      <div>
-        Figur farve:
-        <ColorPicker onColorSelect={handleOnColorChange} />
-      </div>
+      <ColorPicker text='Figur farve' onColorSelect={handleOnColorChange} />
       <div>
         <span className='block'>Rotate</span>
         <button aria-label='rotate-left' onClick={handleRotateLeft}>
