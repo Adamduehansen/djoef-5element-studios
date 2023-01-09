@@ -1,5 +1,7 @@
-import { Listbox } from '@headlessui/react';
+import { Listbox, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
+import classnames from 'classnames';
 import { useDocument } from '../../lib/DocumentProvider';
 import Shape, { shapes } from '../../lib/types/Shape';
 import ColorPicker from '../ui/ColorPicker';
@@ -19,7 +21,12 @@ function ListBoxOption({ text, value }: ListBoxOptionProps): JSX.Element {
     <Listbox.Option value={value} as={Fragment}>
       {({ active, selected }): JSX.Element => {
         return (
-          <li className={selected ? 'text-green-500' : 'text-red-500'}>
+          <li
+            className={classnames('text-gray-500 cursor-pointer', {
+              'text-black': selected,
+              'text-gray-700': active,
+            })}
+          >
             {text}
           </li>
         );
@@ -85,37 +92,53 @@ function SelectedCell(): JSX.Element | null {
   }
 
   return (
-    <>
-      <ColorPicker
-        text='Baggrundsfarve'
-        onColorSelect={handleBackgroundChange}
-      />
-      <div>
+    <div className='p-2'>
+      <div className='mb-2'>
+        <ColorPicker
+          text='Baggrundsfarve'
+          value={selectedCell.background}
+          onColorSelect={handleBackgroundChange}
+        />
+      </div>
+      <div className='mb-2'>
         <Listbox
           value={selectedCell.shape || ''}
           onChange={handleOnShapeChange}
         >
-          <Listbox.Button aria-label='shape-button'>
-            Figur:
-            {selectedCell.shape
-              ? shapeDictionary.get(selectedCell.shape)
-              : 'Ikke valgt'}
+          <Listbox.Button className='flex items-center justify-center border p-2 rounded'>
+            Figur
+            <ChevronDownIcon className='w-5 h-5' />
           </Listbox.Button>
-          <Listbox.Options>
-            <ListBoxOption text='Ingen' value={undefined} />
-            {shapes.map((shape) => {
-              return (
-                <ListBoxOption
-                  key={shape}
-                  value={shape}
-                  text={shapeDictionary.get(shape) || ''}
-                />
-              );
-            })}
-          </Listbox.Options>
+          <Transition
+            enter='transition duration-100 ease-out'
+            enterFrom='transform scale-95 opacity-0'
+            enterTo='transform scale-100 opacity-100'
+            leave='transition duration-75 ease-out'
+            leaveFrom='transform scale-100 opacity-100'
+            leaveTo='transform scale-95 opacity-0'
+          >
+            <Listbox.Options className='absolute z-10 bg-white p-4 border rounded-lg'>
+              <ListBoxOption text='Ingen' value={undefined} />
+              {shapes.map((shape) => {
+                return (
+                  <ListBoxOption
+                    key={shape}
+                    value={shape}
+                    text={shapeDictionary.get(shape) || ''}
+                  />
+                );
+              })}
+            </Listbox.Options>
+          </Transition>
         </Listbox>
       </div>
-      <ColorPicker text='Figur farve' onColorSelect={handleOnColorChange} />
+      <div className='mb-2'>
+        <ColorPicker
+          text='Figur farve'
+          value={selectedCell.color}
+          onColorSelect={handleOnColorChange}
+        />
+      </div>
       <div>
         <span className='block'>Rotate</span>
         <button aria-label='rotate-left' onClick={handleRotateLeft}>
@@ -125,7 +148,7 @@ function SelectedCell(): JSX.Element | null {
           Right
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

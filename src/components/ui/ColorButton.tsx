@@ -6,7 +6,7 @@ interface ColorButtonProps {
 function ColorButton({ value, onClick }: ColorButtonProps): JSX.Element {
   return (
     <button
-      className='h-8 w-8'
+      className='h-8 w-8 border border-white hover:border-gray-700'
       style={{
         background: `#${value}`,
       }}
