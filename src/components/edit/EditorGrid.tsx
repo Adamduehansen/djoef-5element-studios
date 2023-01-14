@@ -5,7 +5,6 @@ import { Grid } from '../../lib/types/Cell';
 import { useDocument } from '../../lib/DocumentProvider';
 import { GridCell } from '../../lib/types/GridCell';
 import ShapeFactory from '../Shape';
-import { Vector2d } from 'konva/lib/types';
 
 type CellGrid = GridCell[][];
 
@@ -25,16 +24,6 @@ function createGrid(options: {
       };
     });
   });
-}
-
-function getPointOfTouch(touch: Touch): {
-  x: number;
-  y: number;
-} {
-  return {
-    x: touch.clientX,
-    y: touch.clientY,
-  };
 }
 
 function EditorGrid(): JSX.Element {
@@ -75,6 +64,7 @@ function EditorGrid(): JSX.Element {
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
+        draggable
         onWheel={({ evt }): void => {
           evt.preventDefault();
           const { deltaY } = evt;
@@ -85,29 +75,17 @@ function EditorGrid(): JSX.Element {
             setScaleFactor(scaleFactor + 0.1);
           }
         }}
-        onTouchMove={({ evt }): void => {
-          evt.preventDefault();
-
-          const { touches } = evt;
-          if (touches.length !== 2) {
-            return;
-          }
-
-          const [touch1, touch2] = evt.touches;
-          const point1 = getPointOfTouch(touch1);
-          const point2 = getPointOfTouch(touch2);
-          console.log('point 1', point1);
-          console.log('point 2', point2);
-        }}
+        onDragStart={makeMouseCursorChange('grabbing')}
+        onDragEnd={makeMouseCursorChange('grab')}
         scale={{
           x: scaleFactor,
           y: scaleFactor,
         }}
+        style={{
+          cursor: 'grab',
+        }}
       >
-        <Layer
-          onMouseEnter={makeMouseCursorChange('pointer')}
-          onMouseLeave={makeMouseCursorChange('default')}
-        >
+        <Layer draggable={false}>
           {gridCells
             .flat()
             .sort((cell) => (cell.selected ? 1 : -1))
@@ -131,6 +109,8 @@ function EditorGrid(): JSX.Element {
                     height={CELL_SIZE}
                     stroke={cell.selected ? 'grey' : 'lightgrey'}
                     strokeEnabled={showGrid}
+                    onMouseEnter={makeMouseCursorChange('pointer')}
+                    onMouseLeave={makeMouseCursorChange('grab')}
                     x={cell.x}
                     y={cell.y}
                     onClick={onSelectHandler}
