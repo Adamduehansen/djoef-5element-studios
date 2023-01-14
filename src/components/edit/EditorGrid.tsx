@@ -38,7 +38,7 @@ function EditorGrid(): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleOutsideClick(event: MouseEvent) {
+    function handleOutsideClick(event: MouseEvent): void {
       if (
         containerRef.current &&
         (event.target as Node).contains(containerRef.current)
@@ -73,8 +73,12 @@ function EditorGrid(): JSX.Element {
   }
 
   function makeMouseCursorChange(cursor: string) {
-    return function (event: Konva.KonvaEventObject<MouseEvent>) {
-      const container = event.target.getStage()!.container();
+    return function ({ target }: Konva.KonvaEventObject<MouseEvent>) {
+      const stage = target.getStage();
+      if (!stage) {
+        return;
+      }
+      const container = stage.container();
       container.style.cursor = cursor;
     };
   }
@@ -96,6 +100,7 @@ function EditorGrid(): JSX.Element {
             .flat()
             .sort((cell) => (cell.selected ? 1 : -1))
             .map((cell) => {
+              const onSelectHandler = makeCellSelectedHandler(cell.id);
               return (
                 <Fragment key={cell.id}>
                   {cell.background && (
@@ -116,7 +121,8 @@ function EditorGrid(): JSX.Element {
                     strokeEnabled={showGrid}
                     x={cell.x}
                     y={cell.y}
-                    onClick={makeCellSelectedHandler(cell.id)}
+                    onClick={onSelectHandler}
+                    onTouchEnd={onSelectHandler}
                   />
                 </Fragment>
               );
