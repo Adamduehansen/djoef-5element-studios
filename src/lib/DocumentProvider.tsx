@@ -8,7 +8,7 @@ import {
   DocumentDto,
   updateTitleOfDocument,
   updateCellsForDocument,
-  updateCellSizeOfDocument,
+  updateScaleFactorOfDocument,
 } from './db';
 
 function DocumentProvider({
@@ -17,14 +17,14 @@ function DocumentProvider({
   const [title, setTitle] = useState<string>();
   const [showGrid, setShowGrid] = useState(true);
   const [grid, setGrid] = useState<Grid>([]);
-  const [cellSize, setCellSize] = useState<number>();
+  const [scaleFactor, setScaleFactor] = useState<number>();
   const [selectedCellId, setSelectedCellId] = useState<string>();
   const [document, setDocument] = useState<DocumentDto>();
 
   const { id } = useParams();
 
   useEffect(() => {
-    async function initDocument() {
+    async function initDocument(): Promise<void> {
       const documentDto = await getDocument(id!);
 
       if (!documentDto) {
@@ -32,9 +32,9 @@ function DocumentProvider({
       }
 
       setDocument(documentDto);
-      setTitle(documentDto!.title);
-      setGrid(documentDto!.grid);
-      setCellSize(documentDto!.cellSize);
+      setTitle(documentDto.title);
+      setGrid(documentDto.grid);
+      setScaleFactor(documentDto.scaleFactor);
     }
     initDocument();
   }, []);
@@ -54,11 +54,11 @@ function DocumentProvider({
   }, [grid]);
 
   useEffect(() => {
-    if (!cellSize) {
+    if (!scaleFactor) {
       return;
     }
-    updateCellSizeOfDocument(id!, cellSize);
-  }, [cellSize]);
+    updateScaleFactorOfDocument(id!, scaleFactor);
+  }, [scaleFactor]);
 
   if (!document) {
     return null;
@@ -81,7 +81,7 @@ function DocumentProvider({
     });
   }
 
-  function setCellShape(cellId: string, shape: Shape) {
+  function setCellShape(cellId: string, shape: Shape): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,
@@ -90,7 +90,7 @@ function DocumentProvider({
     });
   }
 
-  function setCellColor(cellId: string, color: string) {
+  function setCellColor(cellId: string, color: string): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,
@@ -99,7 +99,7 @@ function DocumentProvider({
     });
   }
 
-  function setCellBackground(cellId: string, color: string) {
+  function setCellBackground(cellId: string, color: string): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,
@@ -108,7 +108,7 @@ function DocumentProvider({
     });
   }
 
-  function rotateCellLeft(cellId: string) {
+  function rotateCellLeft(cellId: string): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,
@@ -117,7 +117,7 @@ function DocumentProvider({
     });
   }
 
-  function rotateCellRight(cellId: string) {
+  function rotateCellRight(cellId: string): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,
@@ -135,8 +135,8 @@ function DocumentProvider({
         showGrid: showGrid,
         setShowGrid: setShowGrid,
         grid: grid,
-        cellSize: cellSize || 0,
-        setCellSize: setCellSize,
+        scaleFactor: scaleFactor || 0,
+        setScaleFactor: setScaleFactor,
         setGrid: setGrid,
         gridColumns: document?.gridColumns || 0,
         gridRows: document?.gridRows || 0,

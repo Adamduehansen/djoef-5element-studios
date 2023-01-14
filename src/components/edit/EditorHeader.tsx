@@ -6,7 +6,7 @@ function EditorHeader(): JSX.Element {
   const { title } = useDocument();
 
   return (
-    <header className='flex items-center justify-between border-b py-2'>
+    <header className='flex items-center justify-between border-b bg-white py-2'>
       <Link to='/' aria-label='close' className='p-1'>
         <XMarkIcon className='h-6 w-6' />
       </Link>

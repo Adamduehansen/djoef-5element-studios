@@ -18,57 +18,57 @@ function Editor(): JSX.Element {
 
   return (
     <DocumentProvider>
-      <div className='flex h-screen w-screen flex-col'>
-        <EditorHeader />
-        <div className='relative flex h-screen'>
-          <Popover className='absolute top-1 left-1'>
-            <Popover.Button
-              className='h-6 w-6'
-              onClick={(): void => {
-                setShowCellEditor((current) => {
-                  return !current;
-                });
-              }}
-            >
-              <AdjustmentsHorizontalIcon />
-            </Popover.Button>
-            {showCellEditor && (
-              <Popover.Panel
-                static
-                className='absolute left-0 z-10 rounded border bg-white p-2'
+      <div>
+        <div className='fixed z-10 w-full'>
+          <EditorHeader />
+          <div className='flex justify-between'>
+            <Popover>
+              <Popover.Button
+                className='h-6 w-6'
+                onClick={(): void => {
+                  setShowCellEditor((current) => {
+                    return !current;
+                  });
+                }}
               >
-                <SelectedCell />
-              </Popover.Panel>
-            )}
-          </Popover>
-          <div className='flex w-full items-center justify-center overflow-hidden'>
-            <EditorGrid />
+                <AdjustmentsHorizontalIcon />
+              </Popover.Button>
+              {showCellEditor && (
+                <Popover.Panel
+                  static
+                  className='absolute left-0 z-10 rounded border bg-white p-2'
+                >
+                  <SelectedCell />
+                </Popover.Panel>
+              )}
+            </Popover>
+            <Popover>
+              <Popover.Button
+                className='h-6 w-6'
+                onClick={(): void => {
+                  setShowDocumentEditor((current) => {
+                    return !current;
+                  });
+                }}
+              >
+                <Bars3Icon />
+              </Popover.Button>
+              {showDocumentEditor && (
+                <Popover.Panel
+                  static
+                  className='absolute right-0 z-10 rounded border bg-white p-2'
+                >
+                  <EditDocument
+                    onDownload={(): void => {
+                      setShowDownloadDialog(true);
+                    }}
+                  />
+                </Popover.Panel>
+              )}
+            </Popover>
           </div>
-          <Popover className='absolute top-1 right-1'>
-            <Popover.Button
-              className='h-6 w-6'
-              onClick={(): void => {
-                setShowDocumentEditor((current) => {
-                  return !current;
-                });
-              }}
-            >
-              <Bars3Icon />
-            </Popover.Button>
-            {showDocumentEditor && (
-              <Popover.Panel
-                static
-                className='absolute right-0 z-10 rounded border bg-white p-2'
-              >
-                <EditDocument
-                  onDownload={(): void => {
-                    setShowDownloadDialog(true);
-                  }}
-                />
-              </Popover.Panel>
-            )}
-          </Popover>
         </div>
+        <EditorGrid />
       </div>
       <DownloadDialog
         open={showDownloadDialog}

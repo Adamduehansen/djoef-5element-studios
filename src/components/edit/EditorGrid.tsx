@@ -5,33 +5,44 @@ import { Grid } from '../../lib/types/Cell';
 import { useDocument } from '../../lib/DocumentProvider';
 import { GridCell } from '../../lib/types/GridCell';
 import ShapeFactory from '../Shape';
+import { Vector2d } from 'konva/lib/types';
 
 type CellGrid = GridCell[][];
 
+const CELL_SIZE = 64;
+
 function createGrid(options: {
   grid: Grid;
-  cellsSize: number;
   selectedCellId?: string;
 }): CellGrid {
   return options.grid.map((row, rowIndex) => {
     return row.map((cell, colIndex): GridCell => {
       return {
         ...cell,
-        x: colIndex * options.cellsSize,
-        y: rowIndex * options.cellsSize,
+        x: colIndex * CELL_SIZE,
+        y: rowIndex * CELL_SIZE,
         selected: options.selectedCellId === cell.id,
       };
     });
   });
 }
 
+function getPointOfTouch(touch: Touch): {
+  x: number;
+  y: number;
+} {
+  return {
+    x: touch.clientX,
+    y: touch.clientY,
+  };
+}
+
 function EditorGrid(): JSX.Element {
   const {
     showGrid,
-    gridColumns,
-    gridRows,
     grid,
-    cellSize,
+    scaleFactor,
+    setScaleFactor,
     setSelectedCellId,
     selectedCellId,
   } = useDocument();
@@ -39,7 +50,6 @@ function EditorGrid(): JSX.Element {
 
   const gridCells = createGrid({
     grid: grid,
-    cellsSize: cellSize,
     selectedCellId: selectedCellId,
   });
 
@@ -63,16 +73,41 @@ function EditorGrid(): JSX.Element {
   return (
     <div ref={containerRef}>
       <Stage
-        width={gridColumns * cellSize}
-        height={gridRows * cellSize}
-        onMouseEnter={makeMouseCursorChange('pointer')}
-        onMouseLeave={makeMouseCursorChange('default')}
-        style={{
-          background: 'white',
-          border: '1px solid',
+        width={window.innerWidth}
+        height={window.innerHeight}
+        onWheel={({ evt }): void => {
+          evt.preventDefault();
+          const { deltaY } = evt;
+          if (deltaY > 0) {
+            setScaleFactor(scaleFactor - 0.1);
+          }
+          if (deltaY < 0) {
+            setScaleFactor(scaleFactor + 0.1);
+          }
+        }}
+        onTouchMove={({ evt }): void => {
+          evt.preventDefault();
+
+          const { touches } = evt;
+          if (touches.length !== 2) {
+            return;
+          }
+
+          const [touch1, touch2] = evt.touches;
+          const point1 = getPointOfTouch(touch1);
+          const point2 = getPointOfTouch(touch2);
+          console.log('point 1', point1);
+          console.log('point 2', point2);
+        }}
+        scale={{
+          x: scaleFactor,
+          y: scaleFactor,
         }}
       >
-        <Layer>
+        <Layer
+          onMouseEnter={makeMouseCursorChange('pointer')}
+          onMouseLeave={makeMouseCursorChange('default')}
+        >
           {gridCells
             .flat()
             .sort((cell) => (cell.selected ? 1 : -1))
@@ -82,24 +117,24 @@ function EditorGrid(): JSX.Element {
                 <Fragment key={cell.id}>
                   {cell.background && (
                     <Rect
-                      width={cellSize}
-                      height={cellSize}
+                      width={CELL_SIZE}
+                      height={CELL_SIZE}
                       x={cell.x}
                       y={cell.y}
                       fill={cell.background}
                     />
                   )}
-                  {cell.shape && <ShapeFactory cell={cell} width={cellSize} />}
+                  {cell.shape && <ShapeFactory cell={cell} width={CELL_SIZE} />}
                   <Rect
                     key={cell.id}
-                    width={cellSize}
-                    height={cellSize}
+                    width={CELL_SIZE}
+                    height={CELL_SIZE}
                     stroke={cell.selected ? 'grey' : 'lightgrey'}
                     strokeEnabled={showGrid}
                     x={cell.x}
                     y={cell.y}
                     onClick={onSelectHandler}
-                    onTouchEnd={onSelectHandler}
+                    onTap={onSelectHandler}
                   />
                 </Fragment>
               );

@@ -6,8 +6,7 @@ interface Props {
 }
 
 function EditDocument({ onDownload }: Props): JSX.Element {
-  const { title, setTitle, showGrid, setShowGrid, cellSize, setCellSize } =
-    useDocument();
+  const { title, setTitle, showGrid, setShowGrid } = useDocument();
 
   function makeOnGridChange() {
     return function () {
@@ -19,12 +18,6 @@ function EditDocument({ onDownload }: Props): JSX.Element {
     target,
   }: React.ChangeEvent<HTMLInputElement>): void {
     setTitle(target.value);
-  }
-
-  function onDocumentCellSizeChange({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>): void {
-    setCellSize(parseInt(target.value));
   }
 
   function makeDownloadHandler() {
@@ -51,15 +44,6 @@ function EditDocument({ onDownload }: Props): JSX.Element {
           Vis gitter
         </label>
       </div>
-      <Input
-        type='range'
-        text='Celle størrelse (px)'
-        value={cellSize || ''}
-        min='100'
-        max='500'
-        step='10'
-        onChange={onDocumentCellSizeChange}
-      />
       <button onClick={makeDownloadHandler()}>Download</button>
     </>
   );

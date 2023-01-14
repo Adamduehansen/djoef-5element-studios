@@ -1,15 +1,13 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import Cell, { Grid } from './types/Cell';
 
-const DEFAULT_CELL_SIZE = 100;
-
 export interface DocumentDto {
   id: string;
   title: string;
   grid: Grid;
   gridRows: number;
   gridColumns: number;
-  cellSize: number;
+  scaleFactor: number;
 }
 
 export type NewDocumentOptions = Pick<
@@ -66,7 +64,7 @@ export async function createDocument(
     {
       ...document,
       id: id,
-      cellSize: DEFAULT_CELL_SIZE,
+      scaleFactor: 1,
       grid: createGrid(gridRows, gridColumns),
     },
     id
@@ -75,7 +73,10 @@ export async function createDocument(
   return id;
 }
 
-export async function updateTitleOfDocument(id: string, title: string) {
+export async function updateTitleOfDocument(
+  id: string,
+  title: string
+): Promise<void> {
   const db = await getDB();
   const transaction = db.transaction('document', 'readwrite');
   const store = transaction.objectStore('document');
@@ -93,7 +94,10 @@ export async function updateTitleOfDocument(id: string, title: string) {
   await transaction.done;
 }
 
-export async function updateCellSizeOfDocument(id: string, cellSize: number) {
+export async function updateScaleFactorOfDocument(
+  id: string,
+  cellSize: number
+): Promise<void> {
   const db = await getDB();
   const transaction = db.transaction('document', 'readwrite');
   const store = transaction.objectStore('document');
@@ -102,7 +106,7 @@ export async function updateCellSizeOfDocument(id: string, cellSize: number) {
     await store.put(
       {
         ...document,
-        cellSize: cellSize,
+        scaleFactor: cellSize,
       },
       id
     );
@@ -111,7 +115,10 @@ export async function updateCellSizeOfDocument(id: string, cellSize: number) {
   await transaction.done;
 }
 
-export async function updateCellsForDocument(id: string, cells: Grid) {
+export async function updateCellsForDocument(
+  id: string,
+  cells: Grid
+): Promise<void> {
   const db = await getDB();
   const transaction = db.transaction('document', 'readwrite');
   const store = transaction.objectStore('document');
@@ -136,7 +143,7 @@ export async function getAllDocuments(): Promise<DocumentDto[]> {
   return await store.getAll();
 }
 
-export async function deleteDocument(id: string) {
+export async function deleteDocument(id: string): Promise<void> {
   const db = await getDB();
   const transaction = db.transaction('document', 'readwrite');
   const store = transaction.objectStore('document');
