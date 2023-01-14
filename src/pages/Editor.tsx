@@ -1,4 +1,9 @@
 import { useState } from 'react';
+import { Popover } from '@headlessui/react';
+import {
+  Bars3Icon,
+  AdjustmentsHorizontalIcon,
+} from '@heroicons/react/24/solid';
 import DownloadDialog from '../components/DownloadDialog';
 import EditDocument from '../components/edit/EditDocument';
 import EditorHeader from '../components/edit/EditorHeader';
@@ -8,30 +13,66 @@ import DocumentProvider from '../lib/DocumentProvider';
 
 function Editor(): JSX.Element {
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [showCellEditor, setShowCellEditor] = useState(false);
+  const [showDocumentEditor, setShowDocumentEditor] = useState(false);
 
   return (
     <DocumentProvider>
-      <div className='h-screen w-screen flex flex-col relative'>
+      <div className='flex h-screen w-screen flex-col'>
         <EditorHeader />
-        <div className='h-screen flex'>
-          <div className='h-full w-[300px] border-r'>
-            <SelectedCell />
-          </div>
-          <div className='w-full flex justify-center items-center overflow-hidden'>
+        <div className='relative flex h-screen'>
+          <Popover className='absolute top-1 left-1'>
+            <Popover.Button
+              className='h-6 w-6'
+              onClick={(): void => {
+                setShowCellEditor((current) => {
+                  return !current;
+                });
+              }}
+            >
+              <AdjustmentsHorizontalIcon />
+            </Popover.Button>
+            {showCellEditor && (
+              <Popover.Panel
+                static
+                className='absolute left-0 z-10 rounded border bg-white p-2'
+              >
+                <SelectedCell />
+              </Popover.Panel>
+            )}
+          </Popover>
+          <div className='flex w-full items-center justify-center overflow-hidden'>
             <EditorGrid />
           </div>
-          <div className='h-full w-[300px] border-l'>
-            <EditDocument
-              onDownload={() => {
-                setShowDownloadDialog(true);
+          <Popover className='absolute top-1 right-1'>
+            <Popover.Button
+              className='h-6 w-6'
+              onClick={(): void => {
+                setShowDocumentEditor((current) => {
+                  return !current;
+                });
               }}
-            />
-          </div>
+            >
+              <Bars3Icon />
+            </Popover.Button>
+            {showDocumentEditor && (
+              <Popover.Panel
+                static
+                className='absolute right-0 z-10 rounded border bg-white p-2'
+              >
+                <EditDocument
+                  onDownload={(): void => {
+                    setShowDownloadDialog(true);
+                  }}
+                />
+              </Popover.Panel>
+            )}
+          </Popover>
         </div>
       </div>
       <DownloadDialog
         open={showDownloadDialog}
-        onClose={() => {
+        onClose={(): void => {
           setShowDownloadDialog(false);
         }}
       />

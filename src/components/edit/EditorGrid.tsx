@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import { Grid } from '../../lib/types/Cell';
 import { useDocument } from '../../lib/DocumentProvider';
@@ -37,25 +37,6 @@ function EditorGrid(): JSX.Element {
   } = useDocument();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleOutsideClick(event: MouseEvent): void {
-      if (
-        containerRef.current &&
-        (event.target as Node).contains(containerRef.current)
-      ) {
-        setSelectedCellId(undefined);
-      }
-    }
-
-    const abortController = new AbortController();
-    window.addEventListener('click', handleOutsideClick, {
-      signal: abortController.signal,
-    });
-    return function () {
-      abortController.abort();
-    };
-  }, []);
-
   const gridCells = createGrid({
     grid: grid,
     cellsSize: cellSize,
@@ -64,11 +45,7 @@ function EditorGrid(): JSX.Element {
 
   function makeCellSelectedHandler(id: string) {
     return function () {
-      if (id === selectedCellId) {
-        setSelectedCellId(undefined);
-      } else {
-        setSelectedCellId(id);
-      }
+      setSelectedCellId(id);
     };
   }
 

@@ -15,14 +15,16 @@ function EditDocument({ onDownload }: Props): JSX.Element {
     };
   }
 
-  function onDocumentTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setTitle(event.target.value);
+  function onDocumentTitleChange({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>): void {
+    setTitle(target.value);
   }
 
-  function onDocumentCellSizeChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    setCellSize(parseInt(event.target.value));
+  function onDocumentCellSizeChange({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>): void {
+    setCellSize(parseInt(target.value));
   }
 
   function makeDownloadHandler() {

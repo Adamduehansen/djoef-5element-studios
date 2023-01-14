@@ -22,7 +22,7 @@ function ListBoxOption({ text, value }: ListBoxOptionProps): JSX.Element {
       {({ active, selected }): JSX.Element => {
         return (
           <li
-            className={classnames('text-gray-500 cursor-pointer', {
+            className={classnames('cursor-pointer text-gray-500', {
               'text-black': selected,
               'text-gray-700': active,
             })}
@@ -92,7 +92,7 @@ function SelectedCell(): JSX.Element | null {
   }
 
   return (
-    <div className='p-2'>
+    <>
       <div className='mb-2'>
         <ColorPicker
           text='Baggrundsfarve'
@@ -105,9 +105,9 @@ function SelectedCell(): JSX.Element | null {
           value={selectedCell.shape || ''}
           onChange={handleOnShapeChange}
         >
-          <Listbox.Button className='flex items-center justify-center border p-2 rounded'>
+          <Listbox.Button className='flex items-center justify-center rounded border p-2'>
             Figur
-            <ChevronDownIcon className='w-5 h-5' />
+            <ChevronDownIcon className='h-5 w-5' />
           </Listbox.Button>
           <Transition
             enter='transition duration-100 ease-out'
@@ -117,7 +117,7 @@ function SelectedCell(): JSX.Element | null {
             leaveFrom='transform scale-100 opacity-100'
             leaveTo='transform scale-95 opacity-0'
           >
-            <Listbox.Options className='absolute z-10 bg-white p-4 border rounded-lg'>
+            <Listbox.Options className='absolute z-10 rounded-lg border bg-white p-4'>
               <ListBoxOption text='Ingen' value={undefined} />
               {shapes.map((shape) => {
                 return (
@@ -148,7 +148,7 @@ function SelectedCell(): JSX.Element | null {
           Right
         </button>
       </div>
-    </div>
+    </>
   );
 }
 
