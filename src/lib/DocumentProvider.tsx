@@ -109,16 +109,7 @@ function DocumentProvider({
     });
   }
 
-  function rotateCellLeft(cellId: string): void {
-    updateCell(cellId, (cell) => {
-      return {
-        ...cell,
-        rotation: cell.rotation - 90,
-      };
-    });
-  }
-
-  function rotateCellRight(cellId: string): void {
+  function rotateCell(cellId: string): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,
@@ -146,8 +137,7 @@ function DocumentProvider({
         setCellShape: setCellShape,
         setCellColor: setCellColor,
         setCellBackground: setCellBackground,
-        rotateCellLeft: rotateCellLeft,
-        rotateCellRight: rotateCellRight,
+        rotateCell: rotateCell,
       }}
     >
       {children}

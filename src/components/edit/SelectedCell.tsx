@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { useDocument } from '../../lib/DocumentProvider';
 import Shape, { shapes } from '../../lib/types/Shape';
 import ColorPicker from '../ui/ColorPicker';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 const shapeDictionary = new Map<Shape, string>();
 shapeDictionary.set('arc', 'Bue');
@@ -42,8 +43,7 @@ function SelectedCell(): JSX.Element | null {
     setCellShape,
     setCellColor,
     setCellBackground,
-    rotateCellLeft,
-    rotateCellRight,
+    rotateCell,
   } = useDocument();
 
   if (!selectedCellId) {
@@ -71,18 +71,11 @@ function SelectedCell(): JSX.Element | null {
     setCellBackground(selectedCellId, color);
   }
 
-  function handleRotateLeft(): void {
+  function handleRotateCell(): void {
     if (!selectedCellId) {
       return;
     }
-    rotateCellLeft(selectedCellId);
-  }
-
-  function handleRotateRight(): void {
-    if (!selectedCellId) {
-      return;
-    }
-    rotateCellRight(selectedCellId);
+    rotateCell(selectedCellId);
   }
 
   const selectedCell = grid.flat().find((cell) => cell.id === selectedCellId);
@@ -140,12 +133,9 @@ function SelectedCell(): JSX.Element | null {
         />
       </div>
       <div>
-        <span className='block'>Rotate</span>
-        <button aria-label='rotate-left' onClick={handleRotateLeft}>
-          Left
-        </button>
-        <button aria-label='rotate-right' onClick={handleRotateRight}>
-          Right
+        <button className='flex rounded border p-2' onClick={handleRotateCell}>
+          <span>Rotate</span>
+          <ArrowPathIcon className='h-6 w-6' />
         </button>
       </div>
     </>
