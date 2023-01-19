@@ -22,21 +22,22 @@ function Editor(): JSX.Element {
         <div className='fixed z-10 w-full'>
           <EditorHeader />
           <div className='flex justify-between'>
-            <Popover>
+            <Popover className='ml-1'>
               <Popover.Button
-                className='h-6 w-6'
+                className='flex'
                 onClick={(): void => {
                   setShowCellEditor((current) => {
                     return !current;
                   });
                 }}
               >
-                <AdjustmentsHorizontalIcon />
+                <AdjustmentsHorizontalIcon className='h-6 w-6' />
+                <span>Celle</span>
               </Popover.Button>
               {showCellEditor && (
                 <Popover.Panel
                   static
-                  className='absolute left-0 z-10 rounded border bg-white p-2'
+                  className='absolute left-1 z-10 rounded border bg-white p-2'
                 >
                   <SelectedCell />
                 </Popover.Panel>
@@ -44,19 +45,20 @@ function Editor(): JSX.Element {
             </Popover>
             <Popover>
               <Popover.Button
-                className='h-6 w-6'
+                className='mr-1 flex'
                 onClick={(): void => {
                   setShowDocumentEditor((current) => {
                     return !current;
                   });
                 }}
               >
-                <Bars3Icon />
+                <span>Dokument</span>
+                <Bars3Icon className='h-6 w-6' />
               </Popover.Button>
               {showDocumentEditor && (
                 <Popover.Panel
                   static
-                  className='absolute right-0 z-10 rounded border bg-white p-2'
+                  className='absolute right-1 z-10 rounded border bg-white p-2'
                 >
                   <EditDocument
                     onDownload={(): void => {
