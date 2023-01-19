@@ -29,7 +29,7 @@ function DocumentList(): JSX.Element {
         return (
           <li key={id} className='flex h-52 w-64 border'>
             <Link to={`/editor/${id}`} className='overflow-hidden'>
-              <div className='flex flex-col justify-between h-full'>
+              <div className='flex h-full flex-col justify-between'>
                 <div>
                   <div className='h-32'>
                     <Preview
@@ -43,7 +43,7 @@ function DocumentList(): JSX.Element {
                 </div>
                 <div className='flex justify-between'>
                   {gridColumns} x {gridRows}
-                  <Button text='Slet' onClick={makeDeleteHandler(id)} />
+                  <Button onClick={makeDeleteHandler(id)}>Slet</Button>
                 </div>
               </div>
             </Link>

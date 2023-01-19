@@ -11,9 +11,9 @@ interface Props {
 function ColorPicker({ text, value, onColorSelect }: Props): JSX.Element {
   return (
     <Popover>
-      <Popover.Button className='flex items-center justify-center border p-2 rounded'>
+      <Popover.Button className='translate flex items-center justify-center rounded border p-2 duration-300 hover:bg-gray-300 hover:text-white'>
         <span>{text}</span>
-        <ChevronDownIcon className='w-5 h-5' />
+        <ChevronDownIcon className='h-5 w-5' />
       </Popover.Button>
       <Transition
         enter='transition duration-100 ease-out'
@@ -23,7 +23,7 @@ function ColorPicker({ text, value, onColorSelect }: Props): JSX.Element {
         leaveFrom='transform scale-100 opacity-100'
         leaveTo='transform scale-95 opacity-0'
       >
-        <Popover.Panel className='absolute z-10 bg-white p-4 border rounded-lg'>
+        <Popover.Panel className='absolute z-10 rounded-lg border bg-white p-4'>
           <div>Skov</div>
           <div className='grid grid-cols-3 gap-x-1'>
             <ColorButton value='2f4441' onClick={onColorSelect} />

@@ -24,7 +24,7 @@ function Home(): JSX.Element {
         deleteDocument: deleteDocument,
       }}
     >
-      <Button text='Opret ny' onClick={openNewDialog} />
+      <Button onClick={openNewDialog}>Opret ny</Button>
       <DocumentList />
       <NewDialog open={showNewDialog} onClose={closeNewDialog} />
     </DocumentClientProvider>

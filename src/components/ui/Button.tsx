@@ -1,9 +1,14 @@
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text: string;
-}
+import CONTROL_CLASSES from '../../lib/ControlClasses';
 
-function Button({ text, ...props }: Props): JSX.Element {
-  return <button {...props}>{text}</button>;
+function Button({
+  children,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>): JSX.Element {
+  return (
+    <button className={CONTROL_CLASSES} {...props}>
+      {children}
+    </button>
+  );
 }
 
 export default Button;

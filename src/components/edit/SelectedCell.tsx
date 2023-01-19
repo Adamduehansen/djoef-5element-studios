@@ -6,6 +6,7 @@ import { useDocument } from '../../lib/DocumentProvider';
 import Shape, { shapes } from '../../lib/types/Shape';
 import ColorPicker from '../ui/ColorPicker';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import Button from '../ui/Button';
 
 const shapeDictionary = new Map<Shape, string>();
 shapeDictionary.set('arc', 'Bue');
@@ -98,7 +99,7 @@ function SelectedCell(): JSX.Element | null {
           value={selectedCell.shape || ''}
           onChange={handleOnShapeChange}
         >
-          <Listbox.Button className='flex items-center justify-center rounded border p-2'>
+          <Listbox.Button className='translate flex items-center justify-center rounded border p-2 duration-300 hover:bg-gray-300 hover:text-white'>
             Figur
             <ChevronDownIcon className='h-5 w-5' />
           </Listbox.Button>
@@ -133,10 +134,10 @@ function SelectedCell(): JSX.Element | null {
         />
       </div>
       <div>
-        <button className='flex rounded border p-2' onClick={handleRotateCell}>
+        <Button onClick={handleRotateCell}>
           <span>Rotate</span>
           <ArrowPathIcon className='h-6 w-6' />
-        </button>
+        </Button>
       </div>
     </>
   );

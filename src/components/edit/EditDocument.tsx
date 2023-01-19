@@ -1,4 +1,5 @@
 import { useDocument } from '../../lib/DocumentProvider';
+import Button from '../ui/Button';
 import Input from '../ui/Input';
 
 interface Props {
@@ -44,7 +45,7 @@ function EditDocument({ onDownload }: Props): JSX.Element {
           Vis gitter
         </label>
       </div>
-      <button onClick={makeDownloadHandler()}>Download</button>
+      <Button onClick={makeDownloadHandler()}>Download</Button>
     </>
   );
 }

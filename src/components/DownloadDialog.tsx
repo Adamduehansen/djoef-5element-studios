@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { useDocument } from '../lib/DocumentProvider';
 import Input from './ui/Input';
 import Preview from './Preview';
+import Button from './ui/Button';
 
 interface Props {
   open: boolean;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 function downloadURI(uri: string, name: string) {
-  var link = document.createElement('a');
+  const link = document.createElement('a');
   link.download = name;
   link.href = uri;
   document.body.appendChild(link);
@@ -60,7 +61,7 @@ function DownloadDialog({ open, onClose }: Props): JSX.Element {
               onChange={onDownloadSizeChange}
               autoFocus
             /> */}
-            <button>Download</button>
+            <Button>Download</Button>
           </form>
         </Dialog.Panel>
       </div>

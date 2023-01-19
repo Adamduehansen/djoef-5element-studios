@@ -2,6 +2,7 @@ import { Dialog } from '@headlessui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDocumentClient } from '../lib/DocumentClientProvider';
+import Button from './ui/Button';
 import Input from './ui/Input';
 
 interface Props {
@@ -63,7 +64,7 @@ function NewDialog({ open, onClose }: Props): JSX.Element {
                 setRows(parseInt(event.target.value));
               }}
             />
-            <button>Opret</button>
+            <Button>Opret</Button>
           </form>
         </Dialog.Panel>
       </div>
