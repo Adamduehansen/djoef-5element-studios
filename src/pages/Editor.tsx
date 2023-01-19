@@ -13,7 +13,7 @@ import DocumentProvider from '../lib/DocumentProvider';
 
 function Editor(): JSX.Element {
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
-  const [showCellEditor, setShowCellEditor] = useState(false);
+  const [showCellEditor, setShowCellEditor] = useState(true);
   const [showDocumentEditor, setShowDocumentEditor] = useState(false);
 
   return (
