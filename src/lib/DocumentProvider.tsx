@@ -35,6 +35,7 @@ function DocumentProvider({
       setTitle(documentDto.title);
       setGrid(documentDto.grid);
       setScaleFactor(documentDto.scaleFactor);
+      setSelectedCellId('0-0');
     }
     initDocument();
   }, []);
