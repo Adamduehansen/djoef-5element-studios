@@ -3,12 +3,12 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 import classnames from 'classnames';
 import { useDocument } from '../../lib/DocumentProvider';
-import Shape, { shapes } from '../../lib/types/Shape';
+import ShapeName, { shapes } from '../../lib/types/Shape';
 import ColorPicker from '../ui/ColorPicker';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Button from '../ui/Button';
 
-const shapeDictionary = new Map<Shape, string>();
+const shapeDictionary = new Map<ShapeName, string>();
 shapeDictionary.set('arc', 'Bue');
 shapeDictionary.set('circle', 'Cirkel');
 shapeDictionary.set('triangle', 'Trekant');
@@ -51,7 +51,7 @@ function SelectedCell(): JSX.Element | null {
     return <div>Vælg en celle</div>;
   }
 
-  function handleOnShapeChange(shape: Shape): void {
+  function handleOnShapeChange(shape: ShapeName): void {
     if (!selectedCellId) {
       return;
     }

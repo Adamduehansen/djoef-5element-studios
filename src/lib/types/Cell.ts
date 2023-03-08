@@ -1,9 +1,9 @@
-import Shape from './Shape';
+import ShapeName from './Shape';
 
 interface Cell {
   id: string;
   color?: string;
-  shape?: Shape;
+  shape?: ShapeName;
   background?: string;
   rotation: number;
 }

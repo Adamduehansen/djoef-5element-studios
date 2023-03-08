@@ -1,4 +1,4 @@
-export const shapes = ['arc', 'circle', 'triangle'] as const;
-export type Shape = typeof shapes[number];
+export const shapes = ['arc', 'circle', 'triangle', 'rect'] as const;
+export type ShapeName = (typeof shapes)[number];
 
-export default Shape;
+export default ShapeName;

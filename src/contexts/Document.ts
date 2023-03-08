@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { Grid } from '../lib/types/Cell';
 import { DocumentDto } from '../lib/db';
-import Shape from '../lib/types/Shape';
+import ShapeName from '../lib/types/Shape';
 
 export interface DocumentProps extends DocumentDto {
   setTitle: (value: string) => void;
@@ -11,7 +11,7 @@ export interface DocumentProps extends DocumentDto {
   setScaleFactor: (vale: number) => void;
   selectedCellId?: string;
   setSelectedCellId: (id?: string) => void;
-  setCellShape: (cellId: string, shape: Shape) => void;
+  setCellShape: (cellId: string, shape: ShapeName) => void;
   setCellColor: (cellId: string, color: string) => void;
   setCellBackground: (cellId: string, color: string) => void;
   rotateCell: (cellId: string) => void;

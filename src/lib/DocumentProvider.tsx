@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Document from '../contexts/Document';
 import Cell, { Grid } from './types/Cell';
-import Shape from './types/Shape';
+import ShapeName from './types/Shape';
 import {
   getDocument,
   DocumentDto,
@@ -82,7 +82,7 @@ function DocumentProvider({
     });
   }
 
-  function setCellShape(cellId: string, shape: Shape): void {
+  function setCellShape(cellId: string, shape: ShapeName): void {
     updateCell(cellId, (cell) => {
       return {
         ...cell,

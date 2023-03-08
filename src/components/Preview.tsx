@@ -42,6 +42,7 @@ const Preview = React.forwardRef<Konva.Stage, Props>(
                 <Fragment key={cell.id}>
                   {cell.background && (
                     <Rect
+                      name='rect'
                       width={cellSize}
                       height={cellSize}
                       x={cell.x}
@@ -59,5 +60,7 @@ const Preview = React.forwardRef<Konva.Stage, Props>(
     );
   }
 );
+
+Preview.displayName = 'Preview';
 
 export default Preview;
