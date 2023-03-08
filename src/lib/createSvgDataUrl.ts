@@ -40,7 +40,7 @@ function createTriangle({ x, y, color, rotation }: TagProperties): string {
     fill="${color}" 
     transform="
       translate(-${halfSize} -${halfSize})
-      rotate(${rotation} ${SHAPE_SIZE} ${SHAPE_SIZE})
+      rotate(${rotation} ${x + halfSize} ${y + halfSize})
     "/>`;
 }
 
