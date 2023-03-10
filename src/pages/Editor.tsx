@@ -10,6 +10,7 @@ import EditorHeader from '../components/edit/EditorHeader';
 import EditorGrid from '../components/edit/EditorGrid';
 import SelectedCell from '../components/edit/SelectedCell';
 import DocumentProvider from '../lib/DocumentProvider';
+import EditorToolbar from '../components/edit/EditorToolbar';
 
 function Editor(): JSX.Element {
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
@@ -69,6 +70,7 @@ function Editor(): JSX.Element {
               )}
             </Popover>
           </div>
+          <EditorToolbar />
         </div>
         <EditorGrid />
       </div>
